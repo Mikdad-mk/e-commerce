@@ -9,19 +9,19 @@ import { Providers } from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Avenzoa | Home & Household Essentials",
-  description: "Discover premium household products for your home. Quality kitchen, living room, bedroom & bathroom essentials. Shop Avenzoa for curated home goods delivered to your door.",
+  title: "Avenzo | Home & Household Essentials",
+  description: "Discover premium household products for your home. Quality kitchen, living room, bedroom & bathroom essentials. Shop Avenzo for curated home goods delivered to your door.",
   keywords: "home goods, household products, kitchen accessories, home decor, bathroom essentials, living room decor",
-  authors: [{ name: "Avenzoa" }],
+  authors: [{ name: "Avenzo" }],
   openGraph: {
-    title: "Avenzoa | Home & Household Essentials",
+    title: "Avenzo | Home & Household Essentials",
     description: "Discover premium household products for your home. Quality essentials for every room.",
     type: "website",
     images: ["https://lovable.dev/opengraph-image-p98pqg.png"],
   },
   twitter: {
     card: "summary_large_image",
-    site: "@Avenzoa",
+    site: "@Avenzo",
     images: ["https://lovable.dev/opengraph-image-p98pqg.png"],
   },
 };

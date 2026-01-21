@@ -4,7 +4,7 @@ export const HeroBanner = () => {
       <div className="relative h-[280px] md:h-[340px] lg:h-[400px]">
         <img
           src="/assets/hero-banner.jpg"
-          alt="Avenzoa Home Collection"
+          alt="Avenzo Home Collection"
           className="h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background/60 to-transparent" />

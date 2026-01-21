@@ -1,10 +1,10 @@
-# Avenzoa E-Commerce
+# Avenzo E-Commerce
 
 A modern e-commerce platform for home and household essentials built with Next.js.
 
-## About Avenzoa
+## About Avenzo
 
-Avenzoa is your destination for premium home and household essentials. We curate quality products for every room in your home, from kitchen accessories to living room decor.
+Avenzo is your destination for premium home and household essentials. We curate quality products for every room in your home, from kitchen accessories to living room decor.
 
 ## Features
 
@@ -88,6 +88,6 @@ This project is licensed under the MIT License.
 
 ## Contact
 
-Avenzoa - [@Avenzoa](https://twitter.com/Avenzoa)
+Avenzo - [@Avenzo](https://twitter.com/Avenzo)
 
 Project Link: [https://github.com/Mikdad-mk/e-commerce](https://github.com/Mikdad-mk/e-commerce)

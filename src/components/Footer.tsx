@@ -119,7 +119,7 @@ export const Footer = () => {
       <div className="border-t border-primary-foreground/10">
         <div className="container py-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <span className="font-serif text-xl font-bold">Avenzoa</span>
+            <span className="font-serif text-xl font-bold">Avenzo</span>
             <span className="text-sm text-primary-foreground/60">
               ©2024. All rights reserved
             </span>
