@@ -9,12 +9,12 @@ import { Providers } from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Haven | Home & Household Essentials",
+  title: "Avenzoa | Home & Household Essentials",
   description: "Discover premium household products for your home. Quality kitchen, living room, bedroom & bathroom essentials. Shop Haven for curated home goods delivered to your door.",
   keywords: "home goods, household products, kitchen accessories, home decor, bathroom essentials, living room decor",
   authors: [{ name: "Haven" }],
   openGraph: {
-    title: "Haven | Home & Household Essentials",
+    title: "Avenzoa | Home & Household Essentials",
     description: "Discover premium household products for your home. Quality essentials for every room.",
     type: "website",
     images: ["https://lovable.dev/opengraph-image-p98pqg.png"],
