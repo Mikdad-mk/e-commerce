@@ -5,17 +5,20 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/hooks/use-cart";
 
 const navItems = [
   { label: "Home", href: "/" },
-  { label: "Shop", href: "/shop" },
-  { label: "Categories", href: "/categories" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
+  { label: "Shop", href: "/" },
+  { label: "Categories", href: "/" },
+  { label: "About", href: "/" },
+  { label: "Contact", href: "/" },
 ];
 
 export const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { getTotalItems } = useCart();
+  const cartItemCount = getTotalItems();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
@@ -54,12 +57,16 @@ export const Header = () => {
               2
             </span>
           </Button>
-          <Button variant="ghost" size="icon" className="relative">
-            <ShoppingBag className="h-5 w-5 text-foreground/80" />
-            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground">
-              3
-            </span>
-          </Button>
+          <Link href="/cart">
+            <Button variant="ghost" size="icon" className="relative">
+              <ShoppingBag className="h-5 w-5 text-foreground/80" />
+              {cartItemCount > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground">
+                  {cartItemCount}
+                </span>
+              )}
+            </Button>
+          </Link>
           
           {/* Mobile Menu Button */}
           <Button 
