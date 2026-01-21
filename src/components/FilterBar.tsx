@@ -13,7 +13,7 @@ const filters = [
   { label: "Categories", options: ["All", "Kitchen", "Living Room", "Bedroom", "Bathroom", "Decor"] },
   { label: "Color", options: ["All", "White", "Beige", "Brown", "Grey", "Black"] },
   { label: "Price", options: ["All", "Under $25", "$25 - $50", "$50 - $100", "Over $100"] },
-  { label: "Brand", options: ["All", "Haven", "Artisan Co.", "Natural Living", "Home Basics"] },
+  { label: "Brand", options: ["All", "Avenzoa", "Artisan Co.", "Natural Living", "Home Basics"] },
 ];
 
 export const FilterBar = () => {

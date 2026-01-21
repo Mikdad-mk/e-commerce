@@ -26,7 +26,7 @@ export const Header = () => {
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
           <span className="font-serif text-2xl font-bold tracking-tight text-foreground">
-            Haven
+            Avenzoa
           </span>
         </Link>
 
