@@ -2,109 +2,145 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const footerLinks = {
   company: [
     { label: "About Us", href: "/about" },
-    { label: "Blog", href: "/blog" },
+    { label: "Contact", href: "/contact" },
     { label: "Careers", href: "/careers" },
-    { label: "Locations", href: "/locations" },
+    { label: "Press", href: "/press" },
   ],
-  customerCare: [
-    { label: "Size Guide", href: "/size-guide" },
-    { label: "Help & FAQs", href: "/faq" },
-    { label: "Return My Order", href: "/returns" },
-    { label: "Refer a Friend", href: "/referral" },
-  ],
-  terms: [
-    { label: "Duties & Taxes", href: "/duties" },
+  support: [
+    { label: "Help Center", href: "/help" },
     { label: "Shipping Info", href: "/shipping" },
+    { label: "Returns", href: "/returns" },
+    { label: "Size Guide", href: "/size-guide" },
+  ],
+  legal: [
     { label: "Privacy Policy", href: "/privacy" },
-    { label: "Terms & Conditions", href: "/terms" },
+    { label: "Terms of Service", href: "/terms" },
+    { label: "Refund Policy", href: "/refund" },
+    { label: "Cookie Policy", href: "/cookies" },
   ],
   social: [
-    { label: "Instagram", href: "https://instagram.com" },
-    { label: "Facebook", href: "https://facebook.com" },
-    { label: "Pinterest", href: "https://pinterest.com" },
-    { label: "TikTok", href: "https://tiktok.com" },
+    { label: "Instagram", href: "https://instagram.com/avenzo" },
+    { label: "Facebook", href: "https://facebook.com/avenzo" },
+    { label: "Twitter", href: "https://twitter.com/avenzo" },
+    { label: "Pinterest", href: "https://pinterest.com/avenzo" },
   ],
 };
 
+const paymentMethods = [
+  { name: "American Express", icon: "AMEX" },
+  { name: "Apple Pay", icon: "Apple Pay" },
+  { name: "Diners Club", icon: "Diners" },
+  { name: "Discover", icon: "Discover" },
+  { name: "Google Pay", icon: "Google Pay" },
+  { name: "JCB", icon: "JCB" },
+  { name: "Mastercard", icon: "Mastercard" },
+  { name: "Visa", icon: "Visa" },
+];
+
 export const Footer = () => {
   return (
-    <footer className="bg-foreground text-primary-foreground">
-      {/* Main Footer */}
-      <div className="container py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
-          {/* Newsletter */}
-          <div className="lg:col-span-2 space-y-4">
-            <h3 className="text-lg font-medium">
-              Receive an exclusive{" "}
-              <span className="text-primary">20%</span>{" "}
-              discount code when you signup.
-            </h3>
-            <div className="flex gap-2 max-w-md">
+    <footer className="bg-background border-t border-border mt-auto">
+      {/* Newsletter Section */}
+      <div className="border-b border-border">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+          <div className="max-w-md mx-auto text-center space-y-4">
+            <h3 className="text-lg sm:text-xl font-medium text-foreground">Stay Updated</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Subscribe to get special offers, free giveaways, and updates.
+            </p>
+            <form className="flex flex-col sm:flex-row gap-3 max-w-sm mx-auto">
               <Input
                 type="email"
                 placeholder="Enter your email"
-                className="bg-transparent border-primary-foreground/30 text-primary-foreground placeholder:text-primary-foreground/50 focus-visible:ring-primary"
+                className="flex-1 h-10"
+                required
               />
-              <Button variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground shrink-0">
+              <Button type="submit" className="h-10 px-6 shrink-0">
                 Subscribe
               </Button>
-            </div>
+            </form>
           </div>
+        </div>
+      </div>
 
+      {/* Main Footer Content */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Company */}
-          <div className="footer-section">
-            <h4 className="footer-title">Company</h4>
-            <ul className="space-y-2.5">
+          <div className="space-y-4">
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-foreground">
+              Company
+            </h4>
+            <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
-                  <a href={link.href} className="footer-link">
+                  <Link 
+                    href={link.href} 
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 block py-1"
+                  >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Customer Care */}
-          <div className="footer-section">
-            <h4 className="footer-title">Customer Care</h4>
-            <ul className="space-y-2.5">
-              {footerLinks.customerCare.map((link) => (
+          {/* Support */}
+          <div className="space-y-4">
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-foreground">
+              Support
+            </h4>
+            <ul className="space-y-3">
+              {footerLinks.support.map((link) => (
                 <li key={link.label}>
-                  <a href={link.href} className="footer-link">
+                  <Link 
+                    href={link.href} 
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 block py-1"
+                  >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Terms & Follow */}
-          <div className="footer-section">
-            <h4 className="footer-title">Terms & Policies</h4>
-            <ul className="space-y-2.5">
-              {footerLinks.terms.map((link) => (
+          {/* Legal */}
+          <div className="space-y-4">
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-foreground">
+              Legal
+            </h4>
+            <ul className="space-y-3">
+              {footerLinks.legal.map((link) => (
                 <li key={link.label}>
-                  <a href={link.href} className="footer-link">
+                  <Link 
+                    href={link.href} 
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 block py-1"
+                  >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
-            
-            <h4 className="footer-title mt-6">Follow Us</h4>
-            <ul className="space-y-2.5">
+          </div>
+
+          {/* Social */}
+          <div className="space-y-4">
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-foreground">
+              Follow Us
+            </h4>
+            <ul className="space-y-3">
               {footerLinks.social.map((link) => (
                 <li key={link.label}>
-                  <a
+                  <a 
                     href={link.href}
-                    className="footer-link"
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 block py-1"
                   >
                     {link.label}
                   </a>
@@ -115,34 +151,85 @@ export const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-primary-foreground/10">
-        <div className="container py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <span className="font-serif text-xl font-bold">Avenzo</span>
-            <span className="text-sm text-primary-foreground/60">
-              ©2024. All rights reserved
-            </span>
+      {/* Bottom Section */}
+      <div className="border-t border-border bg-muted/30">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          {/* Country/Region and Payment Methods */}
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-6">
+            {/* Country/Region Selector */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+              <span className="text-sm text-muted-foreground whitespace-nowrap">
+                Country/region
+              </span>
+              <select className="text-sm bg-background border border-border rounded-md px-3 py-2 text-foreground min-w-[200px] focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                <option value="US">United States (USD $)</option>
+                <option value="CA">Canada (CAD $)</option>
+                <option value="UK">United Kingdom (GBP £)</option>
+                <option value="EU">European Union (EUR €)</option>
+                <option value="AU">Australia (AUD $)</option>
+                <option value="JP">Japan (JPY ¥)</option>
+              </select>
+            </div>
+
+            {/* Payment Methods */}
+            <div className="w-full lg:w-auto">
+              <div className="text-sm text-muted-foreground mb-2 lg:text-right">
+                We accept
+              </div>
+              <div className="flex flex-wrap items-center gap-2 justify-start lg:justify-end">
+                {paymentMethods.map((method) => (
+                  <div
+                    key={method.name}
+                    className="flex items-center justify-center min-w-[50px] h-8 bg-background rounded border border-border text-xs font-medium text-muted-foreground hover:border-primary/50 transition-colors duration-200"
+                    title={method.name}
+                  >
+                    {method.icon}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
-          {/* Payment Methods */}
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 px-2 py-1 rounded bg-primary-foreground/10 text-xs font-medium">
-              VISA
-            </div>
-            <div className="flex items-center gap-2 px-2 py-1 rounded bg-primary-foreground/10 text-xs font-medium">
-              MC
-            </div>
-            <div className="flex items-center gap-2 px-2 py-1 rounded bg-primary-foreground/10 text-xs font-medium">
-              AMEX
-            </div>
-            <div className="flex items-center gap-2 px-2 py-1 rounded bg-primary-foreground/10 text-xs font-medium">
-              PayPal
-            </div>
+          {/* Copyright and Legal Links */}
+          <div className="pt-6 border-t border-border">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+              {/* Brand and Copyright */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <Link href="/" className="font-serif text-xl font-bold text-foreground hover:text-primary transition-colors">
+                  Avenzo
+                </Link>
+                <span className="text-sm text-muted-foreground">
+                  © 2024, AVENZO LLC. All rights reserved.
+                </span>
+              </div>
 
-            <div className="hidden md:flex items-center gap-4 ml-4 text-sm text-primary-foreground/60">
-              <span>EN</span>
-              <span>USD</span>
+              {/* Legal Links */}
+              <div className="flex flex-wrap items-center gap-4 lg:gap-6 text-sm">
+                <Link 
+                  href="/privacy" 
+                  className="text-muted-foreground hover:text-foreground transition-colors duration-200 whitespace-nowrap"
+                >
+                  Privacy policy
+                </Link>
+                <Link 
+                  href="/refund" 
+                  className="text-muted-foreground hover:text-foreground transition-colors duration-200 whitespace-nowrap"
+                >
+                  Refund policy
+                </Link>
+                <Link 
+                  href="/shipping" 
+                  className="text-muted-foreground hover:text-foreground transition-colors duration-200 whitespace-nowrap"
+                >
+                  Shipping policy
+                </Link>
+                <Link 
+                  href="/terms" 
+                  className="text-muted-foreground hover:text-foreground transition-colors duration-200 whitespace-nowrap"
+                >
+                  Terms of service
+                </Link>
+              </div>
             </div>
           </div>
         </div>
