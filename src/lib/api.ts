@@ -430,14 +430,15 @@ function getLocalProducts(params?: {
   category?: string;
   search?: string;
 }): { products: Product[]; total: number; page: number; totalPages: number } {
-  // Get products from localStorage first
-  let allProducts = [...fallbackProducts];
+  // Only get products from localStorage (admin-created products)
+  let allProducts: Product[] = [];
   
   // Add products from localStorage if available
   if (typeof window !== 'undefined') {
     try {
       const storedProducts = JSON.parse(localStorage.getItem('avenzo_products') || '[]');
-      allProducts = [...storedProducts, ...fallbackProducts];
+      // Only include admin-created products (those with prod_ prefix)
+      allProducts = storedProducts.filter((product: Product) => product.id.startsWith('prod_'));
     } catch (e) {
       console.warn('Failed to load products from localStorage:', e);
     }
@@ -485,8 +486,12 @@ function getLocalProductById(id: string): Product | null {
     }
   }
   
-  // Fallback to default products
-  return fallbackProducts.find(p => p.id === id) || null;
+  // Check fallback products only for demo product IDs (1-8) - for direct access
+  if (['1', '2', '3', '4', '5', '6', '7', '8'].includes(id)) {
+    return fallbackProducts.find(p => p.id === id) || null;
+  }
+  
+  return null;
 }
 
 // Helper function to get product from local API endpoint

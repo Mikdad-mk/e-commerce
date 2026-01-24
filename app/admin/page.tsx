@@ -35,7 +35,9 @@ export default function AdminPage() {
   const loadStoredProducts = () => {
     try {
       const stored = JSON.parse(localStorage.getItem('avenzo_products') || '[]');
-      setStoredProducts(stored);
+      // Only show products that were created through admin (have prod_ prefix)
+      const adminProducts = stored.filter((product: Product) => product.id.startsWith('prod_'));
+      setStoredProducts(adminProducts);
     } catch (error) {
       console.error('Failed to load stored products:', error);
     }
@@ -46,11 +48,22 @@ export default function AdminPage() {
       const stored = JSON.parse(localStorage.getItem('avenzo_products') || '[]');
       const filtered = stored.filter((p: Product) => p.id !== productId);
       localStorage.setItem('avenzo_products', JSON.stringify(filtered));
-      setStoredProducts(filtered);
+      loadStoredProducts(); // This will now only show admin products
       toast.success('Product deleted successfully!');
     } catch (error) {
       toast.error('Failed to delete product');
       console.error('Delete error:', error);
+    }
+  };
+
+  const clearAllProducts = () => {
+    try {
+      localStorage.removeItem('avenzo_products');
+      setStoredProducts([]);
+      toast.success('All products cleared successfully!');
+    } catch (error) {
+      toast.error('Failed to clear products');
+      console.error('Clear error:', error);
     }
   };
 
@@ -221,13 +234,28 @@ export default function AdminPage() {
         {/* Cache Refresh */}
         <Card>
           <CardHeader>
-            <CardTitle>Cache Management</CardTitle>
+            <CardTitle>Admin Actions</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-3">
             <Button onClick={triggerWebhook} variant="outline" className="w-full">
               <RefreshCw className="mr-2 h-4 w-4" />
               Refresh Product Cache
             </Button>
+            
+            {storedProducts.length > 0 && (
+              <Button 
+                onClick={() => {
+                  if (confirm(`Are you sure you want to delete ALL ${storedProducts.length} products?\n\nThis action cannot be undone.`)) {
+                    clearAllProducts();
+                  }
+                }}
+                variant="destructive" 
+                className="w-full"
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Clear All Products ({storedProducts.length})
+              </Button>
+            )}
           </CardContent>
         </Card>
 
@@ -299,7 +327,8 @@ export default function AdminPage() {
                       variant="destructive"
                       size="icon"
                       className="absolute -top-2 -right-2 h-6 w-6"
-                      onClick={() => handleInputChange('image', '')}
+                      onClick={removeMainImage}
+                      title="Remove main image"
                     >
                       <X className="h-3 w-3" />
                     </Button>
@@ -321,7 +350,7 @@ export default function AdminPage() {
                   <label htmlFor="main-image-upload" className="cursor-pointer">
                     <ImageIcon className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
                     <p className="text-sm text-muted-foreground">
-                      {uploading ? 'Uploading...' : 'Click to upload main image'}
+                      {uploading ? 'Uploading...' : formData.image ? 'Click to replace main image' : 'Click to upload main image'}
                     </p>
                   </label>
                 </div>
@@ -329,26 +358,35 @@ export default function AdminPage() {
 
               {/* Additional Images */}
               <div className="space-y-4">
-                <Label>Additional Images</Label>
+                <div className="flex items-center justify-between">
+                  <Label>Additional Images</Label>
+                  <span className="text-sm text-muted-foreground">
+                    {formData.images.length} image{formData.images.length !== 1 ? 's' : ''}
+                  </span>
+                </div>
                 
                 {formData.images.length > 0 && (
-                  <div className="grid grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {formData.images.map((image, index) => (
-                      <div key={index} className="relative">
+                      <div key={index} className="relative group">
                         <img
                           src={image}
                           alt={`Product ${index + 1}`}
-                          className="w-full h-24 object-cover rounded-lg border"
+                          className="w-full h-24 object-cover rounded-lg border transition-opacity group-hover:opacity-75"
                         />
                         <Button
                           type="button"
                           variant="destructive"
                           size="icon"
-                          className="absolute -top-2 -right-2 h-6 w-6"
+                          className="absolute -top-2 -right-2 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
                           onClick={() => removeImage(index)}
+                          title={`Remove image ${index + 1}`}
                         >
                           <X className="h-3 w-3" />
                         </Button>
+                        <div className="absolute bottom-1 left-1 bg-black/50 text-white text-xs px-1 rounded">
+                          {index + 1}
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -447,50 +485,114 @@ export default function AdminPage() {
         {/* Stored Products */}
         <Card>
           <CardHeader>
-            <CardTitle>Stored Products ({storedProducts.length})</CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle>Your Products ({storedProducts.length})</CardTitle>
+              <Button
+                onClick={loadStoredProducts}
+                variant="outline"
+                size="sm"
+              >
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Refresh
+              </Button>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Products created through this admin panel
+            </p>
           </CardHeader>
           <CardContent>
             {storedProducts.length === 0 ? (
-              <p className="text-muted-foreground text-center py-8">
-                No products stored yet. Add your first product above!
-              </p>
+              <div className="text-center py-12 border-2 border-dashed border-border rounded-lg">
+                <ImageIcon className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium mb-2">No products yet</h3>
+                <p className="text-muted-foreground mb-4">
+                  Create your first product using the form above
+                </p>
+                <Button
+                  onClick={() => document.getElementById('name')?.focus()}
+                  variant="outline"
+                >
+                  Add Your First Product
+                </Button>
+              </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {storedProducts.map((product) => (
-                  <div key={product.id} className="border rounded-lg p-4 space-y-3">
+                  <div key={product.id} className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
                     {product.image && (
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full h-32 object-cover rounded"
-                      />
+                      <div className="aspect-square overflow-hidden bg-gray-100">
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
+                        />
+                      </div>
                     )}
-                    <div>
-                      <h3 className="font-medium text-sm line-clamp-1">{product.name}</h3>
-                      <p className="text-sm text-muted-foreground">${product.price}</p>
-                      <p className="text-xs text-muted-foreground line-clamp-2">{product.description}</p>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => window.open(`/product/${product.id}`, '_blank')}
-                        className="flex-1"
-                      >
-                        <Eye className="h-3 w-3 mr-1" />
-                        View
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="destructive"
-                        onClick={() => {
-                          if (confirm(`Are you sure you want to delete "${product.name}"?`)) {
-                            deleteProduct(product.id);
-                          }
-                        }}
-                      >
-                        <Trash2 className="h-3 w-3" />
-                      </Button>
+                    <div className="p-4 space-y-3">
+                      <div>
+                        <h3 className="font-medium text-sm line-clamp-1" title={product.name}>
+                          {product.name}
+                        </h3>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-lg font-semibold text-primary">
+                            ${product.price}
+                          </span>
+                          {product.originalPrice && (
+                            <span className="text-sm text-muted-foreground line-through">
+                              ${product.originalPrice}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <p className="text-xs text-muted-foreground line-clamp-2" title={product.description}>
+                        {product.description}
+                      </p>
+                      
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span className="bg-secondary px-2 py-1 rounded">
+                          {product.category || 'General'}
+                        </span>
+                        {product.images && product.images.length > 1 && (
+                          <span className="bg-secondary px-2 py-1 rounded">
+                            {product.images.length} images
+                          </span>
+                        )}
+                        {product.isNew && (
+                          <span className="bg-badge-new text-primary-foreground px-2 py-1 rounded">
+                            New
+                          </span>
+                        )}
+                        {product.onSale && (
+                          <span className="bg-badge-sale text-primary-foreground px-2 py-1 rounded">
+                            Sale
+                          </span>
+                        )}
+                      </div>
+                      
+                      <div className="flex gap-2 pt-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => window.open(`/product/${product.id}`, '_blank')}
+                          className="flex-1"
+                        >
+                          <Eye className="h-3 w-3 mr-1" />
+                          View
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => {
+                            if (confirm(`Are you sure you want to delete "${product.name}"?\n\nThis action cannot be undone.`)) {
+                              deleteProduct(product.id);
+                            }
+                          }}
+                          title="Delete product"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 ))}

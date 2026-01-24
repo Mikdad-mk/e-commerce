@@ -1,4 +1,4 @@
-# Base64 Image Upload System Setup Guide
+# Admin-Only Product Management System
 
 This guide will help you set up dynamic product management for your Avenzo e-commerce site with base64 image encoding for local storage.
 

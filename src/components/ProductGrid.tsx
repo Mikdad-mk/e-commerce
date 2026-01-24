@@ -84,26 +84,80 @@ export const ProductGrid = () => {
     );
   }
 
+  // Show empty state when no products exist
+  if (!loading && products.length === 0) {
+    return (
+      <section className="container py-8 md:py-12">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center space-y-6 max-w-md">
+            <div className="mx-auto w-24 h-24 bg-secondary rounded-full flex items-center justify-center">
+              <svg
+                className="w-12 h-12 text-muted-foreground"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M9 1L5 3l4 2 4-2-4-2z"
+                />
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold mb-2">No Products Yet</h3>
+              <p className="text-muted-foreground mb-6">
+                Start building your catalog by adding products through the admin panel.
+              </p>
+              <Button
+                onClick={() => window.open('/admin', '_blank')}
+                className="inline-flex items-center gap-2"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Add Your First Product
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="container py-8 md:py-12">
       {/* Header with Refresh Button */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h2 className="text-2xl font-bold mb-2">Our Products</h2>
+          <h2 className="text-2xl font-bold mb-2">Your Products</h2>
           <p className="text-muted-foreground">
-            Discover our curated collection of home essentials
+            Products created through your admin panel
           </p>
         </div>
-        <Button
-          onClick={handleRefresh}
-          variant="outline"
-          size="sm"
-          disabled={refreshing}
-          className="flex items-center gap-2"
-        >
-          <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-          Refresh
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            onClick={handleRefresh}
+            variant="outline"
+            size="sm"
+            disabled={refreshing}
+            className="flex items-center gap-2"
+          >
+            <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+          <Button
+            onClick={() => window.open('/admin', '_blank')}
+            size="sm"
+            className="flex items-center gap-2"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Add Product
+          </Button>
+        </div>
       </div>
 
       {/* Products Grid */}
@@ -167,6 +221,18 @@ export const ProductGrid = () => {
       {/* Products Count */}
       <div className="text-center mt-6 text-sm text-muted-foreground">
         Showing {products.length} of {totalPages * 8} products
+        {products.length > 0 && (
+          <span className="ml-2">
+            • <Button
+              variant="link"
+              size="sm"
+              className="p-0 h-auto text-sm"
+              onClick={() => window.open('/admin', '_blank')}
+            >
+              Add more products
+            </Button>
+          </span>
+        )}
       </div>
     </section>
   );
