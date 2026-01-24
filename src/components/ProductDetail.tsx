@@ -102,6 +102,7 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
               src={product.images[selectedImage]}
               alt={product.name}
               className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+              loading="lazy"
             />
           </div>
           
@@ -120,6 +121,7 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
                   src={image}
                   alt={`${product.name} ${index + 1}`}
                   className="h-full w-full object-cover"
+                  loading="lazy"
                 />
               </button>
             ))}

@@ -105,7 +105,7 @@ export const ProductCard = ({
 
           {/* Color Options */}
           <div className="flex items-center gap-1.5 pt-1">
-            {colors.map((color, index) => (
+            {colors.slice(0, 4).map((color, index) => (
               <button
                 key={index}
                 className="color-dot"
@@ -118,6 +118,9 @@ export const ProductCard = ({
                 }}
               />
             ))}
+            {colors.length > 4 && (
+              <span className="text-xs text-muted-foreground">+{colors.length - 4}</span>
+            )}
           </div>
         </div>
       </Link>
