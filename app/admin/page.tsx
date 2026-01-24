@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Upload, RefreshCw, X, Image as ImageIcon, Trash2, Eye, LogOut, Clock } from "lucide-react";
-import { uploadBase64Image, createThumbnail, getStorageUsage, isStorageNearLimit, estimateBase64Size } from "@/lib/image-utils";
+import { uploadBase64Image, createThumbnail, getDetailedStorageUsage, isStorageNearLimit, estimateBase64Size } from "@/lib/image-utils";
 import { Product } from "@/lib/api";
 import { isAuthenticated, logout, getSessionTimeRemaining, extendSession } from "@/lib/auth";
 import { AdminLogin } from "@/components/AdminLogin";
@@ -19,6 +19,8 @@ export default function AdminPage() {
   const [uploading, setUploading] = useState(false);
   const [storedProducts, setStoredProducts] = useState<Product[]>([]);
   const [storageUsage, setStorageUsage] = useState({ used: 0, available: 0, percentage: 0 });
+  const [detailedStorage, setDetailedStorage] = useState<any>(null);
+  const [compressionLevel, setCompressionLevel] = useState<'normal' | 'high' | 'ultra'>('ultra');
   const [sessionTime, setSessionTime] = useState(0);
   const [formData, setFormData] = useState({
     name: "",
@@ -72,7 +74,9 @@ export default function AdminPage() {
   };
 
   const updateStorageUsage = () => {
-    setStorageUsage(getStorageUsage());
+    const detailed = getDetailedStorageUsage();
+    setStorageUsage(detailed.total);
+    setDetailedStorage(detailed);
   };
 
   const loadStoredProducts = () => {
@@ -119,7 +123,7 @@ export default function AdminPage() {
     try {
       // Check storage before upload
       const estimatedSize = estimateBase64Size(file);
-      const currentUsage = getStorageUsage();
+      const currentUsage = detailedStorage?.total || { used: 0, available: 5, percentage: 0 };
       
       if (currentUsage.used + (estimatedSize / 1024 / 1024) > 4.5) { // 4.5MB warning
         toast.error('Storage almost full! Consider deleting some images or products.');
@@ -128,8 +132,12 @@ export default function AdminPage() {
       
       setUploading(true);
       
-      // Upload using base64 system
-      const result = await uploadBase64Image(file, true);
+      // Upload using base64 system with selected compression
+      const result = await uploadBase64Image(file, true, compressionLevel);
+      
+      // Show compression stats
+      const compressionRatio = ((result.originalSize - result.compressedSize) / result.originalSize * 100).toFixed(1);
+      console.log(`Compression: ${compressionRatio}% reduction (${(result.originalSize/1024).toFixed(1)}KB → ${(result.compressedSize/1024).toFixed(1)}KB)`);
       
       if (isMainImage) {
         handleInputChange('image', result.base64);
@@ -140,11 +148,11 @@ export default function AdminPage() {
       // Update storage usage
       updateStorageUsage();
       
-      toast.success('Image uploaded successfully!');
+      toast.success(`Image uploaded! ${compressionRatio}% size reduction achieved.`);
       
       // Warn if storage is getting full
       if (isStorageNearLimit()) {
-        toast.warning('Storage is getting full. Consider managing your images.');
+        toast.warning('Storage is getting full. Consider using Ultra compression.');
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
@@ -319,6 +327,76 @@ export default function AdminPage() {
           </div>
         </div>
 
+        {/* Image Compression Settings */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Image Compression Settings</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-3">
+              <Label>Compression Level (affects image quality and storage usage)</Label>
+              <div className="grid grid-cols-1 gap-3">
+                <div 
+                  className={`p-3 border rounded-lg cursor-pointer transition-colors ${
+                    compressionLevel === 'ultra' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
+                  }`}
+                  onClick={() => setCompressionLevel('ultra')}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium text-sm">Ultra Compression (Recommended)</div>
+                      <div className="text-xs text-muted-foreground">300px max, 40% quality - Maximum storage</div>
+                    </div>
+                    <div className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                      ~50-100 images
+                    </div>
+                  </div>
+                </div>
+                
+                <div 
+                  className={`p-3 border rounded-lg cursor-pointer transition-colors ${
+                    compressionLevel === 'high' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
+                  }`}
+                  onClick={() => setCompressionLevel('high')}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium text-sm">High Compression</div>
+                      <div className="text-xs text-muted-foreground">400px max, 50% quality - Good balance</div>
+                    </div>
+                    <div className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
+                      ~30-50 images
+                    </div>
+                  </div>
+                </div>
+                
+                <div 
+                  className={`p-3 border rounded-lg cursor-pointer transition-colors ${
+                    compressionLevel === 'normal' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
+                  }`}
+                  onClick={() => setCompressionLevel('normal')}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium text-sm">Normal Compression</div>
+                      <div className="text-xs text-muted-foreground">600px max, 70% quality - Better quality</div>
+                    </div>
+                    <div className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">
+                      ~15-25 images
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="text-xs text-muted-foreground space-y-1 pt-2 border-t">
+              <p><strong>Ultra Compression:</strong> Best for maximum storage, good for product catalogs</p>
+              <p><strong>High Compression:</strong> Good balance of quality and storage</p>
+              <p><strong>Normal Compression:</strong> Better quality but uses more storage</p>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Storage Usage Monitor */}
         <Card>
           <CardHeader>
@@ -361,9 +439,10 @@ export default function AdminPage() {
             )}
             
             <div className="text-xs text-muted-foreground space-y-1">
-              <p>• Each image is compressed to ~70% quality</p>
-              <p>• Base64 encoding adds ~33% to file size</p>
-              <p>• Recommended: Keep images under 500KB each</p>
+              <p>• <strong>Ultra compression:</strong> ~50-100 images possible</p>
+              <p>• <strong>High compression:</strong> ~30-50 images possible</p>
+              <p>• <strong>Normal compression:</strong> ~15-25 images possible</p>
+              <p>• Current setting: <strong>{compressionLevel}</strong> compression</p>
             </div>
           </CardContent>
         </Card>

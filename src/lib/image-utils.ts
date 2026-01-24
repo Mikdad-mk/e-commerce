@@ -33,11 +33,11 @@ export function validateImageFile(file: File): { valid: boolean; error?: string 
   return { valid: true };
 }
 
-// Helper function to compress base64 image (optional)
+// Helper function to compress base64 image with maximum compression
 export function compressBase64Image(
   base64: string, 
-  maxWidth: number = 600,  // Reduced from 800
-  quality: number = 0.7    // Reduced from 0.8
+  maxWidth: number = 400,    // Reduced from 600
+  quality: number = 0.5      // Reduced from 0.7 for maximum compression
 ): Promise<string> {
   return new Promise((resolve) => {
     const canvas = document.createElement('canvas');
@@ -45,17 +45,21 @@ export function compressBase64Image(
     const img = new Image();
     
     img.onload = () => {
-      // Calculate new dimensions
+      // Calculate new dimensions with more aggressive sizing
       let { width, height } = img;
-      if (width > maxWidth) {
-        height = (height * maxWidth) / width;
-        width = maxWidth;
+      
+      // More aggressive resizing
+      const maxDimension = Math.max(width, height);
+      if (maxDimension > maxWidth) {
+        const ratio = maxWidth / maxDimension;
+        width = Math.round(width * ratio);
+        height = Math.round(height * ratio);
       }
       
       canvas.width = width;
       canvas.height = height;
       
-      // Draw and compress
+      // Draw and compress with maximum compression
       ctx?.drawImage(img, 0, 0, width, height);
       const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
       resolve(compressedBase64);
@@ -65,29 +69,122 @@ export function compressBase64Image(
   });
 }
 
-// Helper function to get storage usage
-export function getStorageUsage(): { used: number; available: number; percentage: number } {
+// Ultra compression for maximum storage
+export function ultraCompressBase64Image(
+  base64: string, 
+  maxWidth: number = 300,    // Very small for maximum storage
+  quality: number = 0.4      // Very low quality but still acceptable
+): Promise<string> {
+  return new Promise((resolve) => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    
+    img.onload = () => {
+      let { width, height } = img;
+      
+      // Ultra aggressive resizing
+      const maxDimension = Math.max(width, height);
+      if (maxDimension > maxWidth) {
+        const ratio = maxWidth / maxDimension;
+        width = Math.round(width * ratio);
+        height = Math.round(height * ratio);
+      }
+      
+      canvas.width = width;
+      canvas.height = height;
+      
+      // Apply additional optimization
+      if (ctx) {
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'low';
+        ctx.drawImage(img, 0, 0, width, height);
+      }
+      
+      const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+      resolve(compressedBase64);
+    };
+    
+    img.src = base64;
+  });
+}
+
+// Helper function to get detailed storage breakdown
+export function getDetailedStorageUsage(): {
+  total: { used: number; available: number; percentage: number };
+  breakdown: { key: string; size: number; type: string }[];
+  recommendations: string[];
+} {
   try {
     let totalSize = 0;
+    const breakdown: { key: string; size: number; type: string }[] = [];
+    
     for (let key in localStorage) {
       if (localStorage.hasOwnProperty(key)) {
-        totalSize += localStorage[key].length;
+        const value = localStorage[key];
+        const size = value.length;
+        totalSize += size;
+        
+        let type = 'Other';
+        if (key === 'avenzo_products') type = 'Products Data';
+        else if (key.startsWith('image_')) type = 'Base64 Images';
+        else if (key.includes('auth')) type = 'Authentication';
+        
+        breakdown.push({
+          key,
+          size: Math.round(size / 1024), // Convert to KB
+          type
+        });
       }
     }
     
-    // Estimate available space (5MB typical limit)
+    // Sort by size (largest first)
+    breakdown.sort((a, b) => b.size - a.size);
+    
     const estimatedLimit = 5 * 1024 * 1024; // 5MB in bytes
-    const usedMB = (totalSize / 1024 / 1024).toFixed(2);
-    const availableMB = ((estimatedLimit - totalSize) / 1024 / 1024).toFixed(2);
+    const usedMB = (totalSize / 1024 / 1024);
+    const availableMB = ((estimatedLimit - totalSize) / 1024 / 1024);
     const percentage = Math.round((totalSize / estimatedLimit) * 100);
     
+    // Generate recommendations
+    const recommendations: string[] = [];
+    if (percentage > 90) {
+      recommendations.push("Critical: Delete some products immediately");
+      recommendations.push("Consider migrating to cloud storage");
+    } else if (percentage > 70) {
+      recommendations.push("Warning: Approaching storage limit");
+      recommendations.push("Compress images more aggressively");
+    } else if (percentage > 50) {
+      recommendations.push("Consider optimizing image sizes");
+    }
+    
+    // Calculate realistic capacity
+    const avgImageSize = breakdown
+      .filter(item => item.type === 'Base64 Images')
+      .reduce((sum, item) => sum + item.size, 0) / 
+      breakdown.filter(item => item.type === 'Base64 Images').length || 0;
+    
+    if (avgImageSize > 0) {
+      const remainingSpace = availableMB * 1024; // Convert to KB
+      const estimatedImagesLeft = Math.floor(remainingSpace / avgImageSize);
+      recommendations.push(`Estimated capacity: ~${estimatedImagesLeft} more images like current ones`);
+    }
+    
     return {
-      used: parseFloat(usedMB),
-      available: parseFloat(availableMB),
-      percentage: Math.min(percentage, 100)
+      total: {
+        used: Math.round(usedMB * 100) / 100,
+        available: Math.round(availableMB * 100) / 100,
+        percentage: Math.min(percentage, 100)
+      },
+      breakdown,
+      recommendations
     };
   } catch (error) {
-    return { used: 0, available: 5, percentage: 0 };
+    return {
+      total: { used: 0, available: 5, percentage: 0 },
+      breakdown: [],
+      recommendations: ['Error reading storage']
+    };
   }
 }
 
@@ -190,11 +287,12 @@ export const imageStorage = {
   }
 };
 
-// Upload function that converts file to base64 and stores it
+// Upload function with compression options
 export async function uploadBase64Image(
   file: File,
-  compress: boolean = true
-): Promise<{ id: string; base64: string; thumbnail?: string }> {
+  compress: boolean = true,
+  compressionLevel: 'normal' | 'high' | 'ultra' = 'high'
+): Promise<{ id: string; base64: string; thumbnail?: string; originalSize: number; compressedSize: number }> {
   // Validate file
   const validation = validateImageFile(file);
   if (!validation.valid) {
@@ -203,21 +301,38 @@ export async function uploadBase64Image(
 
   // Convert to base64
   let base64 = await fileToBase64(file);
+  const originalSize = base64.length;
   
-  // Compress if requested
+  // Apply compression based on level
   if (compress) {
-    base64 = await compressBase64Image(base64);
+    switch (compressionLevel) {
+      case 'ultra':
+        base64 = await ultraCompressBase64Image(base64);
+        break;
+      case 'high':
+        base64 = await compressBase64Image(base64, 400, 0.5);
+        break;
+      case 'normal':
+        base64 = await compressBase64Image(base64, 600, 0.7);
+        break;
+    }
   }
 
   // Generate unique ID
   const id = generateImageId();
   
-  // Create thumbnail
-  const thumbnail = await createThumbnail(base64);
+  // Create thumbnail (always ultra compressed)
+  const thumbnail = await ultraCompressBase64Image(base64, 150, 0.4);
   
   // Save to storage (in a real app, you'd save to a database)
   imageStorage.save(id, base64);
   imageStorage.save(`${id}_thumb`, thumbnail);
   
-  return { id, base64, thumbnail };
+  return { 
+    id, 
+    base64, 
+    thumbnail,
+    originalSize,
+    compressedSize: base64.length
+  };
 }
