@@ -36,8 +36,8 @@ export function validateImageFile(file: File): { valid: boolean; error?: string 
 // Helper function to compress base64 image (optional)
 export function compressBase64Image(
   base64: string, 
-  maxWidth: number = 800, 
-  quality: number = 0.8
+  maxWidth: number = 600,  // Reduced from 800
+  quality: number = 0.7    // Reduced from 0.8
 ): Promise<string> {
   return new Promise((resolve) => {
     const canvas = document.createElement('canvas');
@@ -63,6 +63,44 @@ export function compressBase64Image(
     
     img.src = base64;
   });
+}
+
+// Helper function to get storage usage
+export function getStorageUsage(): { used: number; available: number; percentage: number } {
+  try {
+    let totalSize = 0;
+    for (let key in localStorage) {
+      if (localStorage.hasOwnProperty(key)) {
+        totalSize += localStorage[key].length;
+      }
+    }
+    
+    // Estimate available space (5MB typical limit)
+    const estimatedLimit = 5 * 1024 * 1024; // 5MB in bytes
+    const usedMB = (totalSize / 1024 / 1024).toFixed(2);
+    const availableMB = ((estimatedLimit - totalSize) / 1024 / 1024).toFixed(2);
+    const percentage = Math.round((totalSize / estimatedLimit) * 100);
+    
+    return {
+      used: parseFloat(usedMB),
+      available: parseFloat(availableMB),
+      percentage: Math.min(percentage, 100)
+    };
+  } catch (error) {
+    return { used: 0, available: 5, percentage: 0 };
+  }
+}
+
+// Helper function to check if storage is getting full
+export function isStorageNearLimit(): boolean {
+  const usage = getStorageUsage();
+  return usage.percentage > 80; // Warning at 80%
+}
+
+// Helper function to estimate image size before upload
+export function estimateBase64Size(file: File): number {
+  // Base64 is approximately 33% larger than original
+  return Math.round(file.size * 1.33);
 }
 
 // Helper function to generate a unique filename

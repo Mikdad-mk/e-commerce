@@ -106,19 +106,10 @@ export const ProductGrid = () => {
               </svg>
             </div>
             <div>
-              <h3 className="text-xl font-semibold mb-2">No Products Yet</h3>
-              <p className="text-muted-foreground mb-6">
-                Start building your catalog by adding products through the admin panel.
+              <h3 className="text-xl font-semibold mb-2">No Products Available</h3>
+              <p className="text-muted-foreground">
+                Our product catalog is currently being updated. Please check back soon.
               </p>
-              <Button
-                onClick={() => window.open('/admin', '_blank')}
-                className="inline-flex items-center gap-2"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                Add Your First Product
-              </Button>
             </div>
           </div>
         </div>
@@ -131,33 +122,21 @@ export const ProductGrid = () => {
       {/* Header with Refresh Button */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h2 className="text-2xl font-bold mb-2">Your Products</h2>
+          <h2 className="text-2xl font-bold mb-2">Our Products</h2>
           <p className="text-muted-foreground">
-            Products created through your admin panel
+            Discover our curated collection of home essentials
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={handleRefresh}
-            variant="outline"
-            size="sm"
-            disabled={refreshing}
-            className="flex items-center gap-2"
-          >
-            <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
-          <Button
-            onClick={() => window.open('/admin', '_blank')}
-            size="sm"
-            className="flex items-center gap-2"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            Add Product
-          </Button>
-        </div>
+        <Button
+          onClick={handleRefresh}
+          variant="outline"
+          size="sm"
+          disabled={refreshing}
+          className="flex items-center gap-2"
+        >
+          <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+          Refresh
+        </Button>
       </div>
 
       {/* Products Grid */}
@@ -221,18 +200,6 @@ export const ProductGrid = () => {
       {/* Products Count */}
       <div className="text-center mt-6 text-sm text-muted-foreground">
         Showing {products.length} of {totalPages * 8} products
-        {products.length > 0 && (
-          <span className="ml-2">
-            • <Button
-              variant="link"
-              size="sm"
-              className="p-0 h-auto text-sm"
-              onClick={() => window.open('/admin', '_blank')}
-            >
-              Add more products
-            </Button>
-          </span>
-        )}
       </div>
     </section>
   );

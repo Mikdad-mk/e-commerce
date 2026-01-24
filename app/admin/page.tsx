@@ -7,14 +7,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Upload, RefreshCw, X, Image as ImageIcon, Trash2, Eye } from "lucide-react";
-import { uploadBase64Image, createThumbnail } from "@/lib/image-utils";
+import { Upload, RefreshCw, X, Image as ImageIcon, Trash2, Eye, LogOut, Clock } from "lucide-react";
+import { uploadBase64Image, createThumbnail, getStorageUsage, isStorageNearLimit, estimateBase64Size } from "@/lib/image-utils";
 import { Product } from "@/lib/api";
+import { isAuthenticated, logout, getSessionTimeRemaining, extendSession } from "@/lib/auth";
+import { AdminLogin } from "@/components/AdminLogin";
 
 export default function AdminPage() {
+  const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [storedProducts, setStoredProducts] = useState<Product[]>([]);
+  const [storageUsage, setStorageUsage] = useState({ used: 0, available: 0, percentage: 0 });
+  const [sessionTime, setSessionTime] = useState(0);
   const [formData, setFormData] = useState({
     name: "",
     price: "",
@@ -27,10 +32,48 @@ export default function AdminPage() {
     features: [] as string[],
   });
 
-  // Load stored products on component mount
+  // Check authentication on component mount
   useEffect(() => {
-    loadStoredProducts();
+    setAuthenticated(isAuthenticated());
+    setSessionTime(getSessionTimeRemaining());
+    
+    // Update session time every minute
+    const interval = setInterval(() => {
+      const remaining = getSessionTimeRemaining();
+      setSessionTime(remaining);
+      
+      if (remaining === 0) {
+        setAuthenticated(false);
+        toast.error("Session expired. Please login again.");
+      }
+    }, 60000); // Check every minute
+    
+    return () => clearInterval(interval);
   }, []);
+
+  // Load stored products and update storage usage when authenticated
+  useEffect(() => {
+    if (authenticated) {
+      loadStoredProducts();
+      updateStorageUsage();
+      extendSession(); // Extend session on activity
+    }
+  }, [authenticated]);
+
+  const handleLogin = () => {
+    setAuthenticated(true);
+    setSessionTime(getSessionTimeRemaining());
+  };
+
+  const handleLogout = () => {
+    logout();
+    setAuthenticated(false);
+    toast.success("Logged out successfully");
+  };
+
+  const updateStorageUsage = () => {
+    setStorageUsage(getStorageUsage());
+  };
 
   const loadStoredProducts = () => {
     try {
@@ -60,6 +103,7 @@ export default function AdminPage() {
     try {
       localStorage.removeItem('avenzo_products');
       setStoredProducts([]);
+      updateStorageUsage();
       toast.success('All products cleared successfully!');
     } catch (error) {
       toast.error('Failed to clear products');
@@ -73,6 +117,15 @@ export default function AdminPage() {
 
   const handleImageUpload = async (file: File, isMainImage: boolean = true) => {
     try {
+      // Check storage before upload
+      const estimatedSize = estimateBase64Size(file);
+      const currentUsage = getStorageUsage();
+      
+      if (currentUsage.used + (estimatedSize / 1024 / 1024) > 4.5) { // 4.5MB warning
+        toast.error('Storage almost full! Consider deleting some images or products.');
+        return;
+      }
+      
       setUploading(true);
       
       // Upload using base64 system
@@ -84,7 +137,15 @@ export default function AdminPage() {
         handleInputChange('images', [...formData.images, result.base64]);
       }
       
+      // Update storage usage
+      updateStorageUsage();
+      
       toast.success('Image uploaded successfully!');
+      
+      // Warn if storage is getting full
+      if (isStorageNearLimit()) {
+        toast.warning('Storage is getting full. Consider managing your images.');
+      }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       toast.error(`Failed to upload image: ${errorMessage}`);
@@ -134,6 +195,7 @@ export default function AdminPage() {
     
     try {
       setLoading(true);
+      extendSession(); // Extend session on activity
       
       const productData = {
         ...formData,
@@ -196,6 +258,11 @@ export default function AdminPage() {
     }
   };
 
+  // Show login screen if not authenticated
+  if (!authenticated) {
+    return <AdminLogin onLogin={handleLogin} />;
+  }
+
   const triggerWebhook = async () => {
     try {
       const response = await fetch('/api/webhook/products', {
@@ -224,12 +291,82 @@ export default function AdminPage() {
   return (
     <div className="container mx-auto py-8 max-w-4xl">
       <div className="space-y-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold">Product Admin</h1>
-          <p className="text-muted-foreground mt-2">
-            Add new products to your store with base64 image storage
-          </p>
+        {/* Header with Session Info */}
+        <div className="flex items-center justify-between">
+          <div className="text-center flex-1">
+            <h1 className="text-3xl font-bold">Product Admin</h1>
+            <p className="text-muted-foreground mt-2">
+              Add new products to your store with base64 image storage
+            </p>
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <div className="text-right text-sm text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <Clock className="w-3 h-3" />
+                <span>Session: {sessionTime}m remaining</span>
+              </div>
+            </div>
+            <Button
+              onClick={handleLogout}
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2"
+            >
+              <LogOut className="w-4 h-4" />
+              Logout
+            </Button>
+          </div>
         </div>
+
+        {/* Storage Usage Monitor */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Storage Usage</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span>Used Storage</span>
+                <span>{storageUsage.used}MB / ~5MB</span>
+              </div>
+              <div className="w-full bg-secondary rounded-full h-2">
+                <div 
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    storageUsage.percentage > 90 ? 'bg-red-500' :
+                    storageUsage.percentage > 70 ? 'bg-yellow-500' : 'bg-green-500'
+                  }`}
+                  style={{ width: `${Math.min(storageUsage.percentage, 100)}%` }}
+                />
+              </div>
+              <div className="text-xs text-muted-foreground">
+                {storageUsage.percentage}% used • {storageUsage.available}MB available
+              </div>
+            </div>
+            
+            {storageUsage.percentage > 80 && (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                <div className="flex items-start gap-2">
+                  <svg className="w-4 h-4 text-yellow-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  <div>
+                    <p className="text-sm font-medium text-yellow-800">Storage Warning</p>
+                    <p className="text-xs text-yellow-700 mt-1">
+                      You're running low on storage space. Consider deleting unused products or images.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            <div className="text-xs text-muted-foreground space-y-1">
+              <p>• Each image is compressed to ~70% quality</p>
+              <p>• Base64 encoding adds ~33% to file size</p>
+              <p>• Recommended: Keep images under 500KB each</p>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Cache Refresh */}
         <Card>
