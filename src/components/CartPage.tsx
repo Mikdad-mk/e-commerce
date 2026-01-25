@@ -200,27 +200,6 @@ export const CartPage = () => {
                 </div>
               </CardContent>
             </Card>
-
-            {/* Security Features */}
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="font-medium mb-3">Secure Checkout</h3>
-                <div className="space-y-2 text-sm text-muted-foreground">
-                  <div className="flex items-center space-x-2">
-                    <div className="h-2 w-2 bg-green-500 rounded-full" />
-                    <span>SSL encrypted checkout</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="h-2 w-2 bg-green-500 rounded-full" />
-                    <span>Easy return process</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="h-2 w-2 bg-green-500 rounded-full" />
-                    <span>Free shipping on orders over $50</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </div>
