@@ -94,7 +94,7 @@ export const FAQ = () => {
               We're here 24/7 — use the chatbox on the bottom right to talk to us anytime, or
             </p>
             <p className="text-muted-foreground mb-6">
-              email <a href="mailto:info@avenzo.co.in" className="text-primary hover:underline">info@avenzo.co.in</a>
+              email <a href="mailto:avanzoaofficial@gmail.com" className="text-primary hover:underline">avanzoaofficial@gmail.com</a>
             </p>
             <p className="text-sm text-muted-foreground mb-8">
               by clicking the button below

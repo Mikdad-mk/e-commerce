@@ -276,7 +276,7 @@ export const TermsPage = () => {
                 </p>
 
                 <div className="border-l-4 border-muted pl-4 space-y-2">
-                  <p className="text-sm"><strong>Email:</strong> info@avenzo.co.in</p>
+                  <p className="text-sm"><strong>Email:</strong> avanzoaofficial@gmail.com</p>
                   <p className="text-sm"><strong>Phone:</strong> +1 (555) 123-4567</p>
                   <p className="text-sm">
                     <strong>Mail:</strong><br />

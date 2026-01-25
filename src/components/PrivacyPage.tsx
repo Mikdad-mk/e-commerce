@@ -255,7 +255,7 @@ export const PrivacyPage = () => {
                 </p>
 
                 <div className="border-l-4 border-muted pl-4">
-                  <p className="text-sm font-medium">Email: info@avenzo.co.in</p>
+                  <p className="text-sm font-medium">Email: avanzoaofficial@gmail.com</p>
                 </div>
               </div>
             </CardContent>

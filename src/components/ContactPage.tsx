@@ -69,8 +69,7 @@ export const ContactPage = () => {
                     <Mail className="h-5 w-5 text-primary mt-1" />
                     <div>
                       <p className="font-medium">Email</p>
-                      <p className="text-sm text-muted-foreground">info@avenzo.co.in</p>
-                      <p className="text-sm text-muted-foreground">support@avenzo.co.in</p>
+                      <p className="text-sm text-muted-foreground">avanzoaofficial@gmail.com</p>
                     </div>
                   </div>
 

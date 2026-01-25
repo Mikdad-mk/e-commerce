@@ -53,7 +53,7 @@ export const RefundPage = () => {
                 <h3 className="font-semibold mb-3">To request a return, please contact us at:</h3>
                 <div className="border-l-4 border-muted pl-4">
                   <p className="text-sm text-muted-foreground">
-                    📧 <strong>info@avenzo.co.in</strong>
+                    📧 <strong>avanzoaofficial@gmail.com</strong>
                   </p>
                 </div>
               </div>
@@ -93,7 +93,7 @@ export const RefundPage = () => {
 
               <div className="border-l-4 border-muted pl-4">
                 <p className="text-sm text-muted-foreground">
-                  Contact us immediately at <strong>info@avenzo.co.in</strong> with photos so we can resolve the issue quickly.
+                  Contact us immediately at <strong>avanzoaofficial@gmail.com</strong> with photos so we can resolve the issue quickly.
                 </p>
               </div>
             </CardContent>
@@ -203,7 +203,7 @@ export const RefundPage = () => {
                   If you haven't received your refund after 15 business days, contact us at:
                 </p>
                 <p className="text-sm text-muted-foreground font-medium mt-2">
-                  📧 info@avenzo.co.in
+                  📧 avanzoaofficial@gmail.com
                 </p>
               </div>
             </CardContent>

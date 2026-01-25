@@ -152,7 +152,7 @@ export const AboutPage = () => {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a 
-            href="mailto:info@avenzo.co.in" 
+            href="mailto:avanzoaofficial@gmail.com" 
             className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
           >
             Contact Us

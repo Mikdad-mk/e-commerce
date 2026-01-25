@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 export const HeroBanner = () => {
   return (
     <section className="relative w-full overflow-hidden">
-      <div className="relative h-[280px] md:h-[340px] lg:h-[400px]">
+      <div className="relative h-[400px] md:h-[500px] lg:h-[600px]">
         <img
           src="/assets/hero-banner.jpg"
           alt="Avenzo Home Collection"
@@ -20,7 +20,7 @@ export const HeroBanner = () => {
               <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground">
                 Home Essentials
               </h1>
-              <p className="text-sm text-muted-foreground mb-6">
+              <p className="text-sm text-muted-foreground">
                 Discover our curated collection of premium home essentials
               </p>
               <Link href="/shop">
