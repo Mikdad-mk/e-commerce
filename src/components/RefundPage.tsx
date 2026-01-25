@@ -1,8 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { RotateCcw, Clock, CreditCard, Package, AlertCircle, CheckCircle, Mail } from "lucide-react";
+import { RotateCcw, Clock, CreditCard, Package, AlertCircle, CheckCircle, Mail, X } from "lucide-react";
 
 export const RefundPage = () => {
   return (
@@ -10,236 +9,126 @@ export const RefundPage = () => {
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Refund Policy</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            We want you to be completely satisfied with your purchase. Here's our comprehensive refund policy.
-          </p>
+          <h1 className="text-4xl font-bold mb-4">Return & Refund Policy – AVENZO</h1>
           <p className="text-sm text-muted-foreground mt-2">
-            Last updated: January 25, 2026
+            Last updated: January 23, 2026
           </p>
         </div>
 
         <div className="space-y-8">
-          {/* Return Window */}
+          {/* Introduction */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Clock className="h-5 w-5" />
-                Return Window
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="border rounded-lg p-4 bg-green-50 border-green-200">
-                  <div className="flex items-center gap-2 mb-2">
-                    <CheckCircle className="h-5 w-5 text-green-600" />
-                    <h3 className="font-semibold text-green-800">Standard Returns</h3>
-                  </div>
-                  <p className="text-sm text-green-700 mb-2">
-                    You have <strong>30 days</strong> from delivery to return most items
-                  </p>
-                  <ul className="text-xs text-green-600 space-y-1">
-                    <li>• Home decor items</li>
-                    <li>• Kitchen accessories</li>
-                    <li>• Textiles and linens</li>
-                    <li>• Storage solutions</li>
-                  </ul>
-                </div>
-
-                <div className="border rounded-lg p-4 bg-blue-50 border-blue-200">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Clock className="h-5 w-5 text-blue-600" />
-                    <h3 className="font-semibold text-blue-800">Extended Returns</h3>
-                  </div>
-                  <p className="text-sm text-blue-700 mb-2">
-                    <strong>60 days</strong> for select premium items
-                  </p>
-                  <ul className="text-xs text-blue-600 space-y-1">
-                    <li>• Furniture pieces</li>
-                    <li>• Large appliances</li>
-                    <li>• Premium collections</li>
-                    <li>• Custom orders (conditions apply)</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                <div className="flex items-start gap-2">
-                  <AlertCircle className="h-4 w-4 text-yellow-600 mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium text-yellow-800">Return Window Starts</p>
-                    <p className="text-xs text-yellow-700 mt-1">
-                      The return period begins on the day you receive your item, not when you place the order.
-                    </p>
-                  </div>
-                </div>
-              </div>
+            <CardContent className="pt-6">
+              <p className="text-sm text-muted-foreground">
+                At AVENZO, we want you to be completely satisfied with your purchase. If you are not happy with your order, we're here to help.
+              </p>
             </CardContent>
           </Card>
 
-          {/* Return Conditions */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Package className="h-5 w-5" />
-                Return Conditions
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div>
-                <h3 className="font-semibold mb-3 text-green-800">✓ Eligible for Return</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li>• Items in original condition</li>
-                    <li>• Unused and unworn products</li>
-                    <li>• Original packaging included</li>
-                    <li>• All tags and labels attached</li>
-                  </ul>
-                  <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li>• No signs of wear or damage</li>
-                    <li>• All accessories included</li>
-                    <li>• Original receipt or order number</li>
-                    <li>• Items not on exclusion list</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="font-semibold mb-3 text-red-800">✗ Not Eligible for Return</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li>• Personalized or custom items</li>
-                    <li>• Perishable goods</li>
-                    <li>• Intimate or sanitary products</li>
-                    <li>• Digital downloads</li>
-                  </ul>
-                  <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li>• Items damaged by misuse</li>
-                    <li>• Products past return window</li>
-                    <li>• Final sale items</li>
-                    <li>• Gift cards</li>
-                  </ul>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Return Process */}
+          {/* Returns */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <RotateCcw className="h-5 w-5" />
-                How to Return Items
+                Returns
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-primary font-bold">1</span>
-                  </div>
-                  <h3 className="font-semibold mb-2">Initiate Return</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Contact us or use your account to start a return request
-                  </p>
-                </div>
+              <div className="border-l-4 border-muted pl-4">
+                <p className="text-sm text-muted-foreground font-medium">
+                  We offer a 30-day return period from the date you receive your item.
+                </p>
+              </div>
 
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-primary font-bold">2</span>
-                  </div>
-                  <h3 className="font-semibold mb-2">Pack & Ship</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Pack items securely and ship using our prepaid label
-                  </p>
-                </div>
+              <div>
+                <h3 className="font-semibold mb-3">To qualify for a return:</h3>
+                <ul className="space-y-2 text-sm text-muted-foreground ml-4">
+                  <li>• The item must be unused, unworn, and in its original condition</li>
+                  <li>• Original packaging and tags must be intact</li>
+                  <li>• Proof of purchase is required</li>
+                </ul>
+              </div>
 
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-primary font-bold">3</span>
-                  </div>
-                  <h3 className="font-semibold mb-2">Get Refund</h3>
+              <div>
+                <h3 className="font-semibold mb-3">To request a return, please contact us at:</h3>
+                <div className="border-l-4 border-muted pl-4">
                   <p className="text-sm text-muted-foreground">
-                    Receive your refund within 5-7 business days
+                    📧 <strong>info@avenzo.co.in</strong>
                   </p>
                 </div>
               </div>
 
-              <div className="border-t pt-6">
-                <h3 className="font-semibold mb-3">Return Methods</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="border rounded-lg p-4">
-                    <h4 className="font-medium mb-2">Online Return Portal</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Log into your account and select "Return Items" from your order history.
-                    </p>
-                  </div>
-                  <div className="border rounded-lg p-4">
-                    <h4 className="font-medium mb-2">Contact Customer Service</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Call us at +1 (555) 123-4567 or email support@avenzo.co
-                    </p>
-                  </div>
-                </div>
+              <div className="border-l-4 border-muted pl-4">
+                <p className="text-sm text-muted-foreground mb-2">
+                  Once your return is approved, we will provide instructions on how and where to send your package.
+                </p>
+                <p className="text-sm text-muted-foreground font-medium">
+                  Returns sent without prior approval will not be accepted.
+                </p>
               </div>
             </CardContent>
           </Card>
 
-          {/* Refund Information */}
+          {/* Damaged or Incorrect Items */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <CreditCard className="h-5 w-5" />
-                Refund Information
+                <AlertCircle className="h-5 w-5" />
+                Damaged or Incorrect Items
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div>
-                <h3 className="font-semibold mb-3">Refund Timeline</h3>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <span className="text-sm font-medium">Processing Time</span>
-                    <Badge variant="secondary">1-2 business days</Badge>
-                  </div>
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <span className="text-sm font-medium">Credit Card Refunds</span>
-                    <Badge variant="secondary">3-5 business days</Badge>
-                  </div>
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <span className="text-sm font-medium">PayPal Refunds</span>
-                    <Badge variant="secondary">1-2 business days</Badge>
-                  </div>
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <span className="text-sm font-medium">Bank Transfer</span>
-                    <Badge variant="secondary">5-7 business days</Badge>
-                  </div>
-                </div>
-              </div>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Please inspect your order as soon as it arrives.
+              </p>
 
               <div>
-                <h3 className="font-semibold mb-3">Refund Method</h3>
-                <p className="text-sm text-muted-foreground mb-3">
-                  Refunds will be issued to the original payment method used for the purchase.
-                </p>
+                <h3 className="font-semibold mb-3">If your item is:</h3>
                 <ul className="space-y-1 text-sm text-muted-foreground ml-4">
-                  <li>• Credit card purchases: Refunded to the same card</li>
-                  <li>• PayPal purchases: Refunded to PayPal account</li>
-                  <li>• Gift card purchases: Refunded as store credit</li>
-                  <li>• Cash purchases: Refunded as store credit or check</li>
+                  <li>• Damaged</li>
+                  <li>• Defective</li>
+                  <li>• Incorrect</li>
                 </ul>
               </div>
 
-              <div>
-                <h3 className="font-semibold mb-3">Partial Refunds</h3>
-                <p className="text-sm text-muted-foreground mb-2">
-                  Partial refunds may be issued for:
+              <div className="border-l-4 border-muted pl-4">
+                <p className="text-sm text-muted-foreground">
+                  Contact us immediately at <strong>info@avenzo.co.in</strong> with photos so we can resolve the issue quickly.
                 </p>
-                <ul className="space-y-1 text-sm text-muted-foreground ml-4">
-                  <li>• Items with minor damage or wear</li>
-                  <li>• Items missing original packaging</li>
-                  <li>• Items returned after 30 days but within 60 days</li>
-                  <li>• Restocking fees for large items (if applicable)</li>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Non-Returnable Items */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <X className="h-5 w-5" />
+                Non-Returnable Items
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground mb-3">
+                Some products cannot be returned, including:
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li>• Perishable goods (food, flowers, plants)</li>
+                  <li>• Custom or personalized items</li>
+                  <li>• Personal care or hygiene products</li>
+                  <li>• Hazardous or flammable materials</li>
                 </ul>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li>• Gift cards</li>
+                  <li>• Sale or clearance items</li>
+                </ul>
+              </div>
+
+              <div className="border-l-4 border-muted pl-4">
+                <p className="text-sm text-muted-foreground">
+                  If you're unsure about a product, contact us before purchasing.
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -253,67 +142,69 @@ export const RefundPage = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div>
-                <h3 className="font-semibold mb-2">Exchange Policy</h3>
-                <p className="text-sm text-muted-foreground">
-                  We offer exchanges for the same item in a different size, color, or style 
-                  (subject to availability). Exchanges follow the same timeline as returns.
+              <div className="border-l-4 border-muted pl-4">
+                <h3 className="font-semibold text-muted-foreground mb-2">We do not offer direct exchanges.</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  The fastest solution is to:
                 </p>
-              </div>
-
-              <div>
-                <h3 className="font-semibold mb-2">Price Differences</h3>
-                <ul className="space-y-1 text-sm text-muted-foreground ml-4">
-                  <li>• If the new item costs more, you'll pay the difference</li>
-                  <li>• If the new item costs less, we'll refund the difference</li>
-                  <li>• Exchange shipping is free for defective items</li>
-                  <li>• Standard shipping rates apply for preference exchanges</li>
+                <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+                  <li>• Return the original item</li>
+                  <li>• Place a new order once the return is approved</li>
                 </ul>
               </div>
             </CardContent>
           </Card>
 
-          {/* Contact Information */}
+          {/* EU Customers */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Mail className="h-5 w-5" />
-                Need Help with Returns?
+                <Package className="h-5 w-5" />
+                European Union Customers – 14 Day Right of Withdrawal
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Our customer service team is here to help with any return questions or issues.
+            <CardContent className="space-y-4">
+              <div className="border-l-4 border-muted pl-4">
+                <p className="text-sm text-muted-foreground mb-2">
+                  If your order is delivered within the European Union, you have the legal right to cancel or return your order within 14 days without providing a reason.
                 </p>
+                <p className="text-sm text-muted-foreground">
+                  Returned items must be unused, in original packaging, and with proof of purchase.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <h3 className="font-semibold mb-2">Contact Information</h3>
-                    <div className="space-y-1 text-sm">
-                      <p><strong>Email:</strong> returns@avenzo.co</p>
-                      <p><strong>Phone:</strong> +1 (555) 123-4567</p>
-                      <p><strong>Hours:</strong> Mon-Fri 9AM-6PM EST</p>
-                    </div>
-                  </div>
+          {/* Refunds */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CreditCard className="h-5 w-5" />
+                Refunds
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div>
+                <h3 className="font-semibold mb-3">Refund Process</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Once we receive and inspect your return:
+                </p>
+                <ul className="space-y-2 text-sm text-muted-foreground ml-4">
+                  <li>• You will be notified of approval or rejection</li>
+                  <li>• Approved refunds are processed to your original payment method within 10 business days</li>
+                </ul>
+              </div>
 
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <h3 className="font-semibold mb-2">Return Address</h3>
-                    <div className="text-sm">
-                      <p>AVENZO LLC Returns</p>
-                      <p>456 Warehouse Drive</p>
-                      <p>Distribution Center</p>
-                      <p>Newark, NJ 07102</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <p className="text-sm text-blue-700">
-                    <strong>Tip:</strong> Keep your tracking number when returning items. 
-                    This helps us locate your return and process it faster.
-                  </p>
-                </div>
+              <div className="border-l-4 border-muted pl-4">
+                <p className="text-sm text-muted-foreground mb-2">
+                  Please note: banks and payment providers may take additional time to post the refund.
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  If you haven't received your refund after 15 business days, contact us at:
+                </p>
+                <p className="text-sm text-muted-foreground font-medium mt-2">
+                  📧 info@avenzo.co.in
+                </p>
               </div>
             </CardContent>
           </Card>

@@ -10,7 +10,7 @@ const footerLinks = {
     { label: "Contact", href: "/contact" },
   ],
   support: [
-    { label: "Shipping Info", href: "/shipping" },
+    { label: "Shipping Policy", href: "/shipping" },
   ],
   legal: [
     { label: "Privacy Policy", href: "/privacy" },

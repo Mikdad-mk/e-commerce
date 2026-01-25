@@ -33,11 +33,11 @@ export function validateImageFile(file: File): { valid: boolean; error?: string 
   return { valid: true };
 }
 
-// Helper function to compress base64 image with maximum compression
+// Helper function to compress base64 image with better quality balance
 export function compressBase64Image(
   base64: string, 
-  maxWidth: number = 400,    // Reduced from 600
-  quality: number = 0.5      // Reduced from 0.7 for maximum compression
+  maxWidth: number = 800,    // Increased for better quality
+  quality: number = 0.8      // Increased quality
 ): Promise<string> {
   return new Promise((resolve) => {
     const canvas = document.createElement('canvas');
@@ -45,10 +45,10 @@ export function compressBase64Image(
     const img = new Image();
     
     img.onload = () => {
-      // Calculate new dimensions with more aggressive sizing
+      // Calculate new dimensions maintaining aspect ratio
       let { width, height } = img;
       
-      // More aggressive resizing
+      // Smart resizing - only resize if image is larger than maxWidth
       const maxDimension = Math.max(width, height);
       if (maxDimension > maxWidth) {
         const ratio = maxWidth / maxDimension;
@@ -59,8 +59,13 @@ export function compressBase64Image(
       canvas.width = width;
       canvas.height = height;
       
-      // Draw and compress with maximum compression
-      ctx?.drawImage(img, 0, 0, width, height);
+      // Use better image smoothing for quality
+      if (ctx) {
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, 0, 0, width, height);
+      }
+      
       const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
       resolve(compressedBase64);
     };
@@ -69,11 +74,11 @@ export function compressBase64Image(
   });
 }
 
-// Ultra compression for maximum storage
+// High compression with good quality balance
 export function ultraCompressBase64Image(
   base64: string, 
-  maxWidth: number = 300,    // Very small for maximum storage
-  quality: number = 0.4      // Very low quality but still acceptable
+  maxWidth: number = 600,    // Increased for better quality
+  quality: number = 0.7      // Improved quality while still compressing
 ): Promise<string> {
   return new Promise((resolve) => {
     const canvas = document.createElement('canvas');
@@ -83,7 +88,7 @@ export function ultraCompressBase64Image(
     img.onload = () => {
       let { width, height } = img;
       
-      // Ultra aggressive resizing
+      // Smart resizing with better quality preservation
       const maxDimension = Math.max(width, height);
       if (maxDimension > maxWidth) {
         const ratio = maxWidth / maxDimension;
@@ -94,10 +99,10 @@ export function ultraCompressBase64Image(
       canvas.width = width;
       canvas.height = height;
       
-      // Apply additional optimization
+      // Use high quality smoothing
       if (ctx) {
         ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'low';
+        ctx.imageSmoothingQuality = 'high';
         ctx.drawImage(img, 0, 0, width, height);
       }
       
@@ -217,10 +222,10 @@ export function getImageDimensions(base64: string): Promise<{ width: number; hei
   });
 }
 
-// Helper function to create thumbnail from base64
+// Helper function to create thumbnail from base64 with better quality
 export function createThumbnail(
   base64: string, 
-  size: number = 150
+  size: number = 200  // Increased default size
 ): Promise<string> {
   return new Promise((resolve) => {
     const canvas = document.createElement('canvas');
@@ -236,8 +241,14 @@ export function createThumbnail(
       const x = (img.width - minDim) / 2;
       const y = (img.height - minDim) / 2;
       
-      ctx?.drawImage(img, x, y, minDim, minDim, 0, 0, size, size);
-      const thumbnail = canvas.toDataURL('image/jpeg', 0.8);
+      // Use high quality smoothing for thumbnails
+      if (ctx) {
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, x, y, minDim, minDim, 0, 0, size, size);
+      }
+      
+      const thumbnail = canvas.toDataURL('image/jpeg', 0.85); // Better thumbnail quality
       resolve(thumbnail);
     };
     
@@ -287,7 +298,7 @@ export const imageStorage = {
   }
 };
 
-// Upload function with compression options
+// Upload function with improved compression options
 export async function uploadBase64Image(
   file: File,
   compress: boolean = true,
@@ -303,17 +314,17 @@ export async function uploadBase64Image(
   let base64 = await fileToBase64(file);
   const originalSize = base64.length;
   
-  // Apply compression based on level
+  // Apply compression based on level with improved settings
   if (compress) {
     switch (compressionLevel) {
       case 'ultra':
-        base64 = await ultraCompressBase64Image(base64);
+        base64 = await ultraCompressBase64Image(base64, 600, 0.7); // Better quality
         break;
       case 'high':
-        base64 = await compressBase64Image(base64, 400, 0.5);
+        base64 = await compressBase64Image(base64, 800, 0.8); // High quality
         break;
       case 'normal':
-        base64 = await compressBase64Image(base64, 600, 0.7);
+        base64 = await compressBase64Image(base64, 1000, 0.9); // Near original quality
         break;
     }
   }
@@ -321,8 +332,8 @@ export async function uploadBase64Image(
   // Generate unique ID
   const id = generateImageId();
   
-  // Create thumbnail (always ultra compressed)
-  const thumbnail = await ultraCompressBase64Image(base64, 150, 0.4);
+  // Create thumbnail with good quality
+  const thumbnail = await createThumbnail(base64, 200); // Larger thumbnail
   
   // Save to storage (in a real app, you'd save to a database)
   imageStorage.save(id, base64);

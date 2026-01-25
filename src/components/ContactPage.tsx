@@ -69,8 +69,8 @@ export const ContactPage = () => {
                     <Mail className="h-5 w-5 text-primary mt-1" />
                     <div>
                       <p className="font-medium">Email</p>
-                      <p className="text-sm text-muted-foreground">info@avenzo.co</p>
-                      <p className="text-sm text-muted-foreground">support@avenzo.co</p>
+                      <p className="text-sm text-muted-foreground">info@avenzo.co.in</p>
+                      <p className="text-sm text-muted-foreground">support@avenzo.co.in</p>
                     </div>
                   </div>
 
@@ -89,9 +89,8 @@ export const ContactPage = () => {
                       <p className="font-medium">Address</p>
                       <p className="text-sm text-muted-foreground">
                         AVENZO LLC<br />
-                        123 Business Avenue<br />
-                        Suite 100<br />
-                        New York, NY 10001
+                        30 N GOULD ST STE N<br />
+                        SHERIDAN, WY 82801
                       </p>
                     </div>
                   </div>
@@ -101,8 +100,8 @@ export const ContactPage = () => {
                     <div>
                       <p className="font-medium">Business Hours</p>
                       <p className="text-sm text-muted-foreground">
-                        Monday - Friday: 9:00 AM - 6:00 PM EST<br />
-                        Saturday: 10:00 AM - 4:00 PM EST<br />
+                        Monday - Friday: 9:00 AM - 6:00 PM MST<br />
+                        Saturday: 10:00 AM - 4:00 PM MST<br />
                         Sunday: Closed
                       </p>
                     </div>
@@ -161,7 +160,7 @@ export const ContactPage = () => {
                         type="email"
                         value={formData.email}
                         onChange={(e) => handleInputChange('email', e.target.value)}
-                        placeholder="your.email@avenzo.co"
+                        placeholder="your.email@avenzo.co.in"
                         required
                       />
                     </div>

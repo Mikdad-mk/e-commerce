@@ -34,8 +34,8 @@ export const TermsPage = () => {
                 please do not use this service.
               </p>
               
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-sm text-blue-700">
+              <div className="border-l-4 border-muted pl-4">
+                <p className="text-sm text-muted-foreground">
                   <strong>Important:</strong> These terms constitute a legally binding agreement between 
                   you and AVENZO LLC. Please read them carefully.
                 </p>
@@ -252,8 +252,8 @@ export const TermsPage = () => {
                 changes are posted constitutes acceptance of the modified terms.
               </p>
 
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                <p className="text-sm text-yellow-700">
+              <div className="border-l-4 border-muted pl-4">
+                <p className="text-sm text-muted-foreground">
                   <strong>Stay Informed:</strong> We recommend reviewing these terms periodically 
                   to stay informed of any updates.
                 </p>
@@ -275,15 +275,15 @@ export const TermsPage = () => {
                   If you have questions about these terms of service, please contact us:
                 </p>
 
-                <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-                  <p className="text-sm"><strong>Email:</strong> legal@avenzo.co</p>
+                <div className="border-l-4 border-muted pl-4 space-y-2">
+                  <p className="text-sm"><strong>Email:</strong> info@avenzo.co.in</p>
                   <p className="text-sm"><strong>Phone:</strong> +1 (555) 123-4567</p>
                   <p className="text-sm">
                     <strong>Mail:</strong><br />
                     AVENZO LLC<br />
                     Legal Department<br />
-                    123 Business Avenue, Suite 100<br />
-                    New York, NY 10001
+                    30 N GOULD ST STE N<br />
+                    SHERIDAN, WY 82801
                   </p>
                 </div>
               </div>

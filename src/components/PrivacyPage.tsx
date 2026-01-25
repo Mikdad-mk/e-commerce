@@ -9,16 +9,31 @@ export const PrivacyPage = () => {
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Privacy Policy</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Your privacy is important to us. This policy explains how we collect, use, and protect your information.
-          </p>
+          <h1 className="text-4xl font-bold mb-4">Privacy Policy – AVENZO</h1>
           <p className="text-sm text-muted-foreground mt-2">
-            Last updated: January 25, 2026
+            Last updated: January 23, 2026
           </p>
         </div>
 
         <div className="space-y-8">
+          {/* Introduction */}
+          <Card>
+            <CardContent className="pt-6">
+              <p className="text-sm text-muted-foreground mb-4">
+                AVENZO ("we", "our", "us") operates this website and online store to provide products and services to our customers. 
+                This Privacy Policy explains how we collect, use, store, and protect your personal information when you visit our website, 
+                make a purchase, or communicate with us.
+              </p>
+              
+              <div className="border-l-4 border-muted pl-4">
+                <p className="text-sm text-muted-foreground">
+                  By using our website and services, you agree to the collection and use of information 
+                  in accordance with this Privacy Policy.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Information We Collect */}
           <Card>
             <CardHeader>
@@ -27,34 +42,49 @@ export const PrivacyPage = () => {
                 Information We Collect
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
+              <p className="text-sm text-muted-foreground">
+                We may collect the following personal information:
+              </p>
+
               <div>
-                <h3 className="font-semibold mb-2">Personal Information</h3>
+                <h3 className="font-semibold mb-3">1. Contact Information</h3>
                 <ul className="space-y-1 text-sm text-muted-foreground ml-4">
-                  <li>• Name, email address, and phone number</li>
-                  <li>• Billing and shipping addresses</li>
-                  <li>• Payment information (processed securely by our payment providers)</li>
-                  <li>• Account credentials and preferences</li>
+                  <li>• Name</li>
+                  <li>• Email address</li>
+                  <li>• Phone number</li>
+                  <li>• Billing and shipping address</li>
                 </ul>
               </div>
 
               <div>
-                <h3 className="font-semibold mb-2">Automatically Collected Information</h3>
+                <h3 className="font-semibold mb-3">2. Payment Information</h3>
                 <ul className="space-y-1 text-sm text-muted-foreground ml-4">
-                  <li>• IP address and browser information</li>
-                  <li>• Device type and operating system</li>
-                  <li>• Pages visited and time spent on our site</li>
-                  <li>• Referring websites and search terms</li>
+                  <li>• Payment method details (processed securely by third-party payment providers)</li>
+                  <li>• Transaction history and order details</li>
+                </ul>
+                <div className="border-l-4 border-muted pl-4 mt-3">
+                  <p className="text-sm text-muted-foreground font-medium">
+                    We do not store your full card numbers.
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-semibold mb-3">3. Account & Order Information</h3>
+                <ul className="space-y-1 text-sm text-muted-foreground ml-4">
+                  <li>• Login details (if applicable)</li>
+                  <li>• Products viewed or purchased</li>
+                  <li>• Customer service communications</li>
                 </ul>
               </div>
 
               <div>
-                <h3 className="font-semibold mb-2">Cookies and Tracking</h3>
+                <h3 className="font-semibold mb-3">4. Technical Information</h3>
                 <ul className="space-y-1 text-sm text-muted-foreground ml-4">
-                  <li>• Essential cookies for site functionality</li>
-                  <li>• Analytics cookies to improve our services</li>
-                  <li>• Marketing cookies for personalized experiences</li>
-                  <li>• Third-party cookies from integrated services</li>
+                  <li>• IP address</li>
+                  <li>• Browser and device type</li>
+                  <li>• Website activity and usage data</li>
                 </ul>
               </div>
             </CardContent>
@@ -69,78 +99,40 @@ export const PrivacyPage = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div>
-                <h3 className="font-semibold mb-2">Order Processing</h3>
-                <p className="text-sm text-muted-foreground">
-                  We use your information to process orders, handle payments, arrange shipping, 
-                  and provide customer support for your purchases.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="font-semibold mb-2">Communication</h3>
-                <p className="text-sm text-muted-foreground">
-                  We may send you order confirmations, shipping updates, customer service messages, 
-                  and promotional emails (which you can opt out of at any time).
-                </p>
-              </div>
-
-              <div>
-                <h3 className="font-semibold mb-2">Site Improvement</h3>
-                <p className="text-sm text-muted-foreground">
-                  We analyze usage patterns to improve our website, products, and services. 
-                  This helps us provide a better shopping experience.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="font-semibold mb-2">Legal Compliance</h3>
-                <p className="text-sm text-muted-foreground">
-                  We may use information to comply with legal obligations, resolve disputes, 
-                  and enforce our terms of service.
-                </p>
-              </div>
+              <p className="text-sm text-muted-foreground mb-3">We use your information to:</p>
+              <ul className="space-y-2 text-sm text-muted-foreground ml-4">
+                <li>• Process orders and payments</li>
+                <li>• Deliver products</li>
+                <li>• Provide customer support</li>
+                <li>• Send order updates and important notifications</li>
+                <li>• Improve website performance and user experience</li>
+                <li>• Prevent fraud and unauthorized activity</li>
+                <li>• Comply with legal requirements</li>
+              </ul>
             </CardContent>
           </Card>
 
-          {/* Information Sharing */}
+          {/* Sharing of Information */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Users className="h-5 w-5" />
-                Information Sharing
+                Sharing of Information
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <h3 className="font-semibold mb-2">Service Providers</h3>
-                <p className="text-sm text-muted-foreground">
-                  We share information with trusted third parties who help us operate our business, 
-                  including payment processors, shipping companies, and email service providers.
-                </p>
+                <p className="text-sm text-muted-foreground mb-3">We may share your data only with:</p>
+                <ul className="space-y-1 text-sm text-muted-foreground ml-4">
+                  <li>• Payment processors (for secure transactions)</li>
+                  <li>• Shipping and delivery partners</li>
+                  <li>• Service providers who help operate our website</li>
+                </ul>
               </div>
 
-              <div>
-                <h3 className="font-semibold mb-2">Legal Requirements</h3>
-                <p className="text-sm text-muted-foreground">
-                  We may disclose information when required by law, court order, or to protect 
-                  our rights, property, or safety, or that of others.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="font-semibold mb-2">Business Transfers</h3>
-                <p className="text-sm text-muted-foreground">
-                  In the event of a merger, acquisition, or sale of assets, customer information 
-                  may be transferred as part of the business transaction.
-                </p>
-              </div>
-
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <h3 className="font-semibold text-green-800 mb-2">We Never Sell Your Data</h3>
-                <p className="text-sm text-green-700">
-                  We do not sell, rent, or trade your personal information to third parties 
-                  for their marketing purposes.
+              <div className="border-l-4 border-muted pl-4">
+                <p className="text-sm text-muted-foreground font-medium">
+                  We do not sell or rent your personal data.
                 </p>
               </div>
             </CardContent>
@@ -155,31 +147,29 @@ export const PrivacyPage = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div>
-                <h3 className="font-semibold mb-2">Security Measures</h3>
-                <ul className="space-y-1 text-sm text-muted-foreground ml-4">
-                  <li>• SSL encryption for all data transmission</li>
-                  <li>• Secure servers with regular security updates</li>
-                  <li>• Limited access to personal information</li>
-                  <li>• Regular security audits and monitoring</li>
-                </ul>
-              </div>
+              <p className="text-sm text-muted-foreground">
+                We use reasonable security measures to protect your personal information. However, no online system is 100% secure, 
+                and we cannot guarantee absolute security.
+              </p>
+            </CardContent>
+          </Card>
 
-              <div>
-                <h3 className="font-semibold mb-2">Payment Security</h3>
-                <p className="text-sm text-muted-foreground">
-                  We use industry-standard payment processors that comply with PCI DSS standards. 
-                  We do not store complete credit card information on our servers.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="font-semibold mb-2">Data Retention</h3>
-                <p className="text-sm text-muted-foreground">
-                  We retain your information only as long as necessary to provide services, 
-                  comply with legal obligations, and resolve disputes.
-                </p>
-              </div>
+          {/* Data Retention */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                Data Retention
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground mb-3">We keep your information only as long as necessary to:</p>
+              <ul className="space-y-1 text-sm text-muted-foreground ml-4">
+                <li>• Fulfill orders</li>
+                <li>• Comply with legal obligations</li>
+                <li>• Resolve disputes</li>
+                <li>• Improve services</li>
+              </ul>
             </CardContent>
           </Card>
 
@@ -188,41 +178,65 @@ export const PrivacyPage = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Shield className="h-5 w-5" />
-                Your Rights and Choices
+                Your Rights
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div>
-                <h3 className="font-semibold mb-2">Access and Update</h3>
-                <p className="text-sm text-muted-foreground">
-                  You can access and update your account information at any time through 
-                  your account dashboard or by contacting us.
-                </p>
-              </div>
+              <p className="text-sm text-muted-foreground mb-3">Depending on your location, you may have the right to:</p>
+              <ul className="space-y-1 text-sm text-muted-foreground ml-4">
+                <li>• Access your personal data</li>
+                <li>• Request correction or deletion</li>
+                <li>• Withdraw consent for marketing emails</li>
+              </ul>
+              <p className="text-sm text-muted-foreground mt-3">
+                You can request this by contacting us.
+              </p>
+            </CardContent>
+          </Card>
 
-              <div>
-                <h3 className="font-semibold mb-2">Email Preferences</h3>
-                <p className="text-sm text-muted-foreground">
-                  You can opt out of promotional emails by clicking the unsubscribe link 
-                  in any email or updating your account preferences.
-                </p>
-              </div>
+          {/* Cookies */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                Cookies
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                We may use cookies and similar technologies to improve website functionality and analytics. 
+                You can disable cookies in your browser settings.
+              </p>
+            </CardContent>
+          </Card>
 
-              <div>
-                <h3 className="font-semibold mb-2">Cookie Settings</h3>
-                <p className="text-sm text-muted-foreground">
-                  You can control cookies through your browser settings. Note that disabling 
-                  certain cookies may affect site functionality.
-                </p>
-              </div>
+          {/* Children's Privacy */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Shield className="h-5 w-5" />
+                Children's Privacy
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Our services are not intended for children under 18, and we do not knowingly collect data from minors.
+              </p>
+            </CardContent>
+          </Card>
 
-              <div>
-                <h3 className="font-semibold mb-2">Data Deletion</h3>
-                <p className="text-sm text-muted-foreground">
-                  You can request deletion of your account and personal information by 
-                  contacting our customer service team.
-                </p>
-              </div>
+          {/* Changes to Policy */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                Changes to This Policy
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated date.
+              </p>
             </CardContent>
           </Card>
 
@@ -231,33 +245,17 @@ export const PrivacyPage = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Mail className="h-5 w-5" />
-                Contact Us About Privacy
+                Contact Information
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <p className="text-sm text-muted-foreground">
-                  If you have questions about this privacy policy or how we handle your information, 
-                  please contact us:
+                  If you have any questions about this Privacy Policy or your data, contact us at:
                 </p>
 
-                <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-                  <p className="text-sm"><strong>Email:</strong> privacy@avenzo.co</p>
-                  <p className="text-sm"><strong>Phone:</strong> +1 (555) 123-4567</p>
-                  <p className="text-sm">
-                    <strong>Mail:</strong><br />
-                    AVENZO LLC<br />
-                    Privacy Department<br />
-                    123 Business Avenue, Suite 100<br />
-                    New York, NY 10001
-                  </p>
-                </div>
-
-                <div className="border-t pt-4">
-                  <p className="text-xs text-muted-foreground">
-                    We reserve the right to update this privacy policy at any time. 
-                    Changes will be posted on this page with an updated revision date.
-                  </p>
+                <div className="border-l-4 border-muted pl-4">
+                  <p className="text-sm font-medium">Email: info@avenzo.co.in</p>
                 </div>
               </div>
             </CardContent>

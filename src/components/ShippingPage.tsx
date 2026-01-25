@@ -1,7 +1,6 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Truck, Package, Clock, MapPin, Shield, DollarSign } from "lucide-react";
 
 export const ShippingPage = () => {
@@ -10,186 +9,226 @@ export const ShippingPage = () => {
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Shipping Information</h1>
+          <h1 className="text-4xl font-bold mb-4">Shipping Policy – AVENZO</h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Everything you need to know about our shipping options, delivery times, and policies.
+            Everything you need to know about our shipping policies, delivery times, and order processing.
           </p>
         </div>
 
-        {/* Shipping Options */}
+        {/* Shipping Policies */}
         <div className="space-y-8">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Truck className="h-5 w-5" />
-                Shipping Options
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div className="border rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-semibold">Standard Shipping</h3>
-                      <Badge variant="secondary">$5.99</Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground mb-2">5-7 business days</p>
-                    <p className="text-sm">Perfect for regular orders with no rush.</p>
-                  </div>
-
-                  <div className="border rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-semibold">Express Shipping</h3>
-                      <Badge variant="secondary">$12.99</Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground mb-2">2-3 business days</p>
-                    <p className="text-sm">Faster delivery for when you need it sooner.</p>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="border rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-semibold">Overnight Shipping</h3>
-                      <Badge variant="secondary">$24.99</Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground mb-2">1 business day</p>
-                    <p className="text-sm">Next day delivery for urgent orders.</p>
-                  </div>
-
-                  <div className="border rounded-lg p-4 bg-green-50 border-green-200">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-semibold text-green-800">Free Shipping</h3>
-                      <Badge className="bg-green-100 text-green-800">$0.00</Badge>
-                    </div>
-                    <p className="text-sm text-green-700 mb-2">5-7 business days</p>
-                    <p className="text-sm text-green-700">On orders over $75</p>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Delivery Information */}
+          {/* Order Cancellation */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Package className="h-5 w-5" />
-                Delivery Information
+                Order Cancellation
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="font-semibold mb-3 flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
-                    Processing Time
-                  </h3>
-                  <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li>• Orders placed before 2 PM EST ship same day</li>
-                    <li>• Orders placed after 2 PM EST ship next business day</li>
-                    <li>• Weekend orders ship on Monday</li>
-                    <li>• Holiday processing may be delayed</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold mb-3 flex items-center gap-2">
-                    <MapPin className="h-4 w-4" />
-                    Delivery Areas
-                  </h3>
-                  <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li>• United States (all 50 states)</li>
-                    <li>• Canada (additional fees may apply)</li>
-                    <li>• Alaska & Hawaii (extended delivery time)</li>
-                    <li>• PO Boxes and APO/FPO addresses</li>
-                  </ul>
-                </div>
+            <CardContent className="space-y-4">
+              <div className="border-l-4 border-muted pl-4">
+                <h3 className="font-semibold mb-2">Important Notice</h3>
+                <p className="text-sm text-muted-foreground mb-2">
+                  Once an order is placed, it begins processing immediately and cannot be cancelled.
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  If you no longer want the item after delivery, please contact our support team to start 
+                  the return and refund process.
+                </p>
               </div>
             </CardContent>
           </Card>
 
-          {/* Shipping Policies */}
+          {/* Shipping Protection */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Shield className="h-5 w-5" />
-                Shipping Policies
+                Shipping Protection
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-semibold mb-2">Order Tracking</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Once your order ships, you'll receive a tracking number via email. You can track your package 
-                    on our website or directly with the carrier.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold mb-2">Delivery Attempts</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Carriers will attempt delivery up to 3 times. If unsuccessful, packages will be held at 
-                    the local facility for pickup or returned to us.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold mb-2">Damaged or Lost Packages</h3>
-                  <p className="text-sm text-muted-foreground">
-                    If your package arrives damaged or goes missing, please contact us within 48 hours. 
-                    We'll work with the carrier to resolve the issue quickly.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold mb-2">Address Changes</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Address changes can only be made before the order ships. Once shipped, contact the 
-                    carrier directly to arrange delivery changes.
-                  </p>
-                </div>
+            <CardContent className="space-y-4">
+              <div className="border-l-4 border-muted pl-4">
+                <h3 className="font-semibold mb-2">Coverage Details</h3>
+                <p className="text-sm text-muted-foreground mb-2">
+                  If you selected Shipping Protection at checkout, your order is covered in case it is lost in transit.
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  You may choose a replacement or a full refund if this happens.
+                </p>
               </div>
             </CardContent>
           </Card>
 
-          {/* International Shipping */}
+          {/* Lost or Missing Packages */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <MapPin className="h-5 w-5" />
+                Lost or Missing Packages
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div>
+                <h3 className="font-semibold mb-3">Address Accuracy</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Please make sure your shipping address is correct when placing your order.
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  We are not responsible for delivery issues caused by incorrect or incomplete addresses.
+                </p>
+              </div>
+
+              <div className="border-l-4 border-muted pl-4">
+                <h3 className="font-semibold mb-2">Our Responsibility</h3>
+                <p className="text-sm text-muted-foreground">
+                  If a package is lost due to an error on our side, we will take full responsibility 
+                  and offer a replacement or refund at no additional cost.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Customs & Import Fees */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <DollarSign className="h-5 w-5" />
-                Additional Fees
+                Customs & Import Fees
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="border-l-4 border-muted pl-4">
+                <h3 className="font-semibold mb-2">International Orders</h3>
+                <p className="text-sm text-muted-foreground mb-2">
+                  Some orders may be subject to customs or import fees depending on your country.
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  These fees are not included in the product price and are the responsibility of the customer.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Shipping Time by Region */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Clock className="h-5 w-5" />
+                Shipping Time
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <p className="text-sm text-muted-foreground">
+                Shipping times vary by location. Estimated delivery times are shown below:
+              </p>
+
+              <div>
+                <h3 className="font-semibold mb-4">Estimated Delivery Times</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse border border-border rounded-lg">
+                    <thead>
+                      <tr className="bg-muted/50">
+                        <th className="border border-border p-4 text-left font-semibold">Location</th>
+                        <th className="border border-border p-4 text-left font-semibold">Estimated Delivery Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="border border-border p-4">United States</td>
+                        <td className="border border-border p-4">7–15 business days</td>
+                      </tr>
+                      <tr className="bg-muted/20">
+                        <td className="border border-border p-4">Canada & Europe</td>
+                        <td className="border border-border p-4">7–15 business days</td>
+                      </tr>
+                      <tr>
+                        <td className="border border-border p-4">Australia & New Zealand</td>
+                        <td className="border border-border p-4">15–25 business days</td>
+                      </tr>
+                      <tr className="bg-muted/20">
+                        <td className="border border-border p-4">Central & South America</td>
+                        <td className="border border-border p-4">7–15 business days</td>
+                      </tr>
+                      <tr>
+                        <td className="border border-border p-4">Asia</td>
+                        <td className="border border-border p-4">7–15 business days</td>
+                      </tr>
+                      <tr className="bg-muted/20">
+                        <td className="border border-border p-4">Africa</td>
+                        <td className="border border-border p-4">15–30 business days</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div className="border-t pt-4">
+                <h3 className="font-semibold mb-2">Please note:</h3>
+                <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+                  <li>• Processing time is 2–3 business days</li>
+                  <li>• Delivery times do not include customs or clearance delays</li>
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Tracking Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Truck className="h-5 w-5" />
+                Tracking Information
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div>
+                <h3 className="font-semibold mb-3">Order Tracking</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Once your order ships, you will receive a tracking number by email.
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  In some cases, tracking updates may take a few days to appear.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="font-semibold mb-3">Tracking Shows "No Information Available"</h3>
+                <p className="text-sm text-muted-foreground mb-2">
+                  Some carriers take 2–5 business days to update tracking details.
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  If your order was placed more than 5 business days ago and tracking has not updated, 
+                  please contact our support team for assistance.
+                </p>
+              </div>
+
+              <div className="border-t pt-4">
+                <h3 className="font-semibold mb-2">Need Tracking Help?</h3>
+                <p className="text-sm text-muted-foreground">
+                  Contact us at <span className="font-medium">support@avenzo.co.in</span> or 
+                  <span className="font-medium"> +1 (555) 123-4567</span> with your order number.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Contact Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Package className="h-5 w-5" />
+                Questions About Shipping?
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="border rounded-lg p-4">
-                    <h3 className="font-semibold mb-2">Oversized Items</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Large furniture and oversized items may incur additional shipping fees. 
-                      These will be calculated at checkout.
-                    </p>
-                  </div>
-
-                  <div className="border rounded-lg p-4">
-                    <h3 className="font-semibold mb-2">Remote Areas</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Delivery to remote or rural areas may require additional fees and 
-                      extended delivery times.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-blue-800 mb-2">Need Help?</h3>
-                  <p className="text-sm text-blue-700">
-                    Have questions about shipping? Contact our customer service team at 
-                    <span className="font-medium"> support@avenzo.co</span> or 
-                    <span className="font-medium"> +1 (555) 123-4567</span>.
-                  </p>
-                </div>
+              <div className="border-l-4 border-muted pl-4">
+                <h3 className="font-semibold mb-2">Contact Our Support Team</h3>
+                <p className="text-sm text-muted-foreground">
+                  Have questions about shipping? Contact our customer service team at 
+                  <span className="font-medium"> support@avenzo.co.in</span> or 
+                  <span className="font-medium"> +1 (555) 123-4567</span>.
+                </p>
               </div>
             </CardContent>
           </Card>

@@ -20,7 +20,7 @@ export default function AdminPage() {
   const [storedProducts, setStoredProducts] = useState<Product[]>([]);
   const [storageUsage, setStorageUsage] = useState({ used: 0, available: 0, percentage: 0 });
   const [detailedStorage, setDetailedStorage] = useState<any>(null);
-  const [compressionLevel, setCompressionLevel] = useState<'normal' | 'high' | 'ultra'>('ultra');
+  const [compressionLevel, setCompressionLevel] = useState<'normal' | 'high' | 'ultra'>('high');
   const [sessionTime, setSessionTime] = useState(0);
   const [formData, setFormData] = useState({
     name: "",
@@ -338,34 +338,34 @@ export default function AdminPage() {
               <div className="grid grid-cols-1 gap-3">
                 <div 
                   className={`p-3 border rounded-lg cursor-pointer transition-colors ${
-                    compressionLevel === 'ultra' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
-                  }`}
-                  onClick={() => setCompressionLevel('ultra')}
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium text-sm">Ultra Compression (Recommended)</div>
-                      <div className="text-xs text-muted-foreground">300px max, 40% quality - Maximum storage</div>
-                    </div>
-                    <div className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
-                      ~50-100 images
-                    </div>
-                  </div>
-                </div>
-                
-                <div 
-                  className={`p-3 border rounded-lg cursor-pointer transition-colors ${
                     compressionLevel === 'high' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
                   }`}
                   onClick={() => setCompressionLevel('high')}
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-medium text-sm">High Compression</div>
-                      <div className="text-xs text-muted-foreground">400px max, 50% quality - Good balance</div>
+                      <div className="font-medium text-sm">High Quality (Recommended)</div>
+                      <div className="text-xs text-muted-foreground">800px max, 80% quality - Best balance</div>
                     </div>
-                    <div className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
-                      ~30-50 images
+                    <div className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                      ~20-30 images
+                    </div>
+                  </div>
+                </div>
+                
+                <div 
+                  className={`p-3 border rounded-lg cursor-pointer transition-colors ${
+                    compressionLevel === 'ultra' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
+                  }`}
+                  onClick={() => setCompressionLevel('ultra')}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium text-sm">Balanced Compression</div>
+                      <div className="text-xs text-muted-foreground">600px max, 70% quality - Good quality & storage</div>
+                    </div>
+                    <div className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                      ~30-40 images
                     </div>
                   </div>
                 </div>
@@ -378,11 +378,11 @@ export default function AdminPage() {
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-medium text-sm">Normal Compression</div>
-                      <div className="text-xs text-muted-foreground">600px max, 70% quality - Better quality</div>
+                      <div className="font-medium text-sm">Maximum Quality</div>
+                      <div className="text-xs text-muted-foreground">1000px max, 90% quality - Near original</div>
                     </div>
-                    <div className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">
-                      ~15-25 images
+                    <div className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
+                      ~10-15 images
                     </div>
                   </div>
                 </div>
@@ -390,9 +390,9 @@ export default function AdminPage() {
             </div>
             
             <div className="text-xs text-muted-foreground space-y-1 pt-2 border-t">
-              <p><strong>Ultra Compression:</strong> Best for maximum storage, good for product catalogs</p>
-              <p><strong>High Compression:</strong> Good balance of quality and storage</p>
-              <p><strong>Normal Compression:</strong> Better quality but uses more storage</p>
+              <p><strong>High Quality:</strong> Best balance of quality and storage (Recommended)</p>
+              <p><strong>Balanced:</strong> Good quality with efficient storage</p>
+              <p><strong>Maximum Quality:</strong> Near-original quality but uses more storage</p>
             </div>
           </CardContent>
         </Card>
@@ -439,9 +439,9 @@ export default function AdminPage() {
             )}
             
             <div className="text-xs text-muted-foreground space-y-1">
-              <p>• <strong>Ultra compression:</strong> ~50-100 images possible</p>
-              <p>• <strong>High compression:</strong> ~30-50 images possible</p>
-              <p>• <strong>Normal compression:</strong> ~15-25 images possible</p>
+              <p>• <strong>High quality:</strong> ~20-30 images possible (Recommended)</p>
+              <p>• <strong>Balanced:</strong> ~30-40 images possible</p>
+              <p>• <strong>Maximum quality:</strong> ~10-15 images possible</p>
               <p>• Current setting: <strong>{compressionLevel}</strong> compression</p>
             </div>
           </CardContent>
