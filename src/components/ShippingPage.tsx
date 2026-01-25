@@ -6,26 +6,26 @@ import { Truck, Package, Clock, MapPin, Shield, DollarSign } from "lucide-react"
 export const ShippingPage = () => {
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
+      <div className="container mx-auto px-4 py-8 sm:py-12 max-w-4xl">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Shipping Policy – AVENZO</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Shipping Policy – AVENZO</h1>
+          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
             Everything you need to know about our shipping policies, delivery times, and order processing.
           </p>
         </div>
 
         {/* Shipping Policies */}
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
           {/* Order Cancellation */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
                 <Package className="h-5 w-5" />
                 Order Cancellation
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="p-4 sm:p-6 space-y-4">
               <div className="border-l-4 border-muted pl-4">
                 <h3 className="font-semibold mb-2">Important Notice</h3>
                 <p className="text-sm text-muted-foreground mb-2">
@@ -126,37 +126,37 @@ export const ShippingPage = () => {
               <div>
                 <h3 className="font-semibold mb-4">Estimated Delivery Times</h3>
                 <div className="overflow-x-auto">
-                  <table className="w-full border-collapse border border-border rounded-lg">
+                  <table className="w-full border-collapse border border-border rounded-lg min-w-[400px]">
                     <thead>
                       <tr className="bg-muted/50">
-                        <th className="border border-border p-4 text-left font-semibold">Location</th>
-                        <th className="border border-border p-4 text-left font-semibold">Estimated Delivery Time</th>
+                        <th className="border border-border p-3 sm:p-4 text-left font-semibold text-sm sm:text-base">Location</th>
+                        <th className="border border-border p-3 sm:p-4 text-left font-semibold text-sm sm:text-base">Estimated Delivery Time</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td className="border border-border p-4">United States</td>
-                        <td className="border border-border p-4">7–15 business days</td>
+                        <td className="border border-border p-3 sm:p-4 text-sm sm:text-base">United States</td>
+                        <td className="border border-border p-3 sm:p-4 text-sm sm:text-base">7–15 business days</td>
                       </tr>
                       <tr className="bg-muted/20">
-                        <td className="border border-border p-4">Canada & Europe</td>
-                        <td className="border border-border p-4">7–15 business days</td>
+                        <td className="border border-border p-3 sm:p-4 text-sm sm:text-base">Canada & Europe</td>
+                        <td className="border border-border p-3 sm:p-4 text-sm sm:text-base">7–15 business days</td>
                       </tr>
                       <tr>
-                        <td className="border border-border p-4">Australia & New Zealand</td>
-                        <td className="border border-border p-4">15–25 business days</td>
+                        <td className="border border-border p-3 sm:p-4 text-sm sm:text-base">Australia & New Zealand</td>
+                        <td className="border border-border p-3 sm:p-4 text-sm sm:text-base">15–25 business days</td>
                       </tr>
                       <tr className="bg-muted/20">
-                        <td className="border border-border p-4">Central & South America</td>
-                        <td className="border border-border p-4">7–15 business days</td>
+                        <td className="border border-border p-3 sm:p-4 text-sm sm:text-base">Central & South America</td>
+                        <td className="border border-border p-3 sm:p-4 text-sm sm:text-base">7–15 business days</td>
                       </tr>
                       <tr>
-                        <td className="border border-border p-4">Asia</td>
-                        <td className="border border-border p-4">7–15 business days</td>
+                        <td className="border border-border p-3 sm:p-4 text-sm sm:text-base">Asia</td>
+                        <td className="border border-border p-3 sm:p-4 text-sm sm:text-base">7–15 business days</td>
                       </tr>
                       <tr className="bg-muted/20">
-                        <td className="border border-border p-4">Africa</td>
-                        <td className="border border-border p-4">15–30 business days</td>
+                        <td className="border border-border p-3 sm:p-4 text-sm sm:text-base">Africa</td>
+                        <td className="border border-border p-3 sm:p-4 text-sm sm:text-base">15–30 business days</td>
                       </tr>
                     </tbody>
                   </table>

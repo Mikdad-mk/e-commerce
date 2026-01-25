@@ -84,17 +84,17 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
   };
 
   return (
-    <div className="container py-8">
+    <div className="container py-6 sm:py-8">
       {/* Breadcrumb */}
-      <nav className="flex items-center space-x-2 text-sm text-muted-foreground mb-8">
-        <a href="/" className="hover:text-foreground">Home</a>
+      <nav className="flex items-center space-x-2 text-sm text-muted-foreground mb-6 sm:mb-8 overflow-x-auto">
+        <a href="/" className="hover:text-foreground whitespace-nowrap">Home</a>
         <span>/</span>
-        <a href="/" className="hover:text-foreground">Products</a>
+        <a href="/" className="hover:text-foreground whitespace-nowrap">Products</a>
         <span>/</span>
-        <span className="text-foreground">{product.name}</span>
+        <span className="text-foreground truncate">{product.name}</span>
       </nav>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
         {/* Product Images */}
         <div className="space-y-4">
           <div className="aspect-square overflow-hidden rounded-lg bg-secondary/50">
@@ -107,13 +107,13 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
           </div>
           
           {/* Image Thumbnails */}
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 overflow-x-auto pb-2">
             {product.images.map((image, index) => (
               <button
                 key={index}
                 onClick={() => setSelectedImage(index)}
                 className={cn(
-                  "aspect-square w-20 overflow-hidden rounded-md border-2 transition-colors",
+                  "aspect-square w-16 sm:w-20 flex-shrink-0 overflow-hidden rounded-md border-2 transition-colors",
                   selectedImage === index ? "border-primary" : "border-transparent"
                 )}
               >
@@ -129,7 +129,7 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
         </div>
 
         {/* Product Info */}
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {/* Title and Badges */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
@@ -144,7 +144,7 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
                 </Badge>
               )}
             </div>
-            <h1 className="text-3xl font-bold">{product.name}</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold">{product.name}</h1>
             
             {/* Rating */}
             <div className="flex items-center space-x-2">
@@ -164,15 +164,15 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
           </div>
 
           {/* Price */}
-          <div className="flex items-center space-x-2">
+          <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-2">
             <span className={cn(
-              "text-3xl font-bold",
+              "text-2xl sm:text-3xl font-bold",
               product.onSale ? "text-sale" : "text-foreground"
             )}>
               ${product.price.toFixed(2)}
             </span>
             {product.originalPrice && (
-              <span className="text-xl text-muted-foreground line-through">
+              <span className="text-lg sm:text-xl text-muted-foreground line-through">
                 ${product.originalPrice.toFixed(2)}
               </span>
             )}
@@ -206,8 +206,8 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
 
           {/* Quantity and Add to Cart */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center border rounded-md">
+            <div className="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+              <div className="flex items-center border rounded-md w-fit">
                 <Button
                   variant="ghost"
                   size="icon"
@@ -234,7 +234,7 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
               </div>
             </div>
 
-            <div className="flex space-x-3">
+            <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
               <Button 
                 onClick={handleAddToCart}
                 disabled={!product.inStock}
@@ -250,17 +250,18 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
                 size="lg"
                 onClick={handleWishlistToggle}
                 className={cn(
-                  "px-4",
+                  "px-4 sm:px-6",
                   isWishlisted && "bg-red-50 border-red-200 text-red-600"
                 )}
               >
                 <Heart className={cn("h-4 w-4", isWishlisted && "fill-current")} />
+                <span className="ml-2 sm:hidden">Wishlist</span>
               </Button>
             </div>
           </div>
 
           {/* Features */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-6 border-t border-b">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 py-6 border-t border-b">
             <div className="flex items-center space-x-2">
               <Truck className="h-5 w-5 text-primary" />
               <span className="text-sm">Free Shipping</span>
@@ -278,18 +279,18 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
       </div>
 
       {/* Product Details Tabs */}
-      <div className="mt-16">
+      <div className="mt-12 sm:mt-16">
         <Tabs defaultValue="details" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="details">Details</TabsTrigger>
-            <TabsTrigger value="features">Features</TabsTrigger>
-            <TabsTrigger value="care">Care Instructions</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 h-auto">
+            <TabsTrigger value="details" className="text-xs sm:text-sm">Details</TabsTrigger>
+            <TabsTrigger value="features" className="text-xs sm:text-sm">Features</TabsTrigger>
+            <TabsTrigger value="care" className="text-xs sm:text-sm">Care Instructions</TabsTrigger>
           </TabsList>
           
           <TabsContent value="details" className="mt-6 space-y-4">
             <div className="prose max-w-none">
               <h3 className="text-lg font-semibold mb-4">Product Details</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <h4 className="font-medium mb-2">Dimensions</h4>
                   <p className="text-muted-foreground">{product.dimensions}</p>

@@ -91,22 +91,22 @@ export const CheckoutPage = () => {
   }
 
   return (
-    <div className="container py-8">
+    <div className="container py-6 sm:py-8">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Checkout</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">Checkout</h1>
 
         <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
             {/* Checkout Form */}
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {/* Contact Information */}
               <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="flex items-center space-x-2 text-lg sm:text-xl">
                     <span>Contact Information</span>
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="p-4 sm:p-6 space-y-4">
                   <div>
                     <Label htmlFor="email">Email Address</Label>
                     <Input
@@ -128,8 +128,8 @@ export const CheckoutPage = () => {
                     <span>Shipping Address</span>
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+                <CardContent className="p-4 sm:p-6 space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="firstName">First Name</Label>
                       <Input
@@ -160,7 +160,7 @@ export const CheckoutPage = () => {
                     />
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="city">City</Label>
                       <Input
@@ -181,7 +181,7 @@ export const CheckoutPage = () => {
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="zipCode">ZIP Code</Label>
                       <Input
@@ -241,7 +241,7 @@ export const CheckoutPage = () => {
                         />
                       </div>
                       
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <Label htmlFor="expiryDate">Expiry Date</Label>
                           <Input
@@ -291,12 +291,12 @@ export const CheckoutPage = () => {
             </div>
 
             {/* Order Summary */}
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <Card>
                 <CardHeader>
                   <CardTitle>Order Summary</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="p-4 sm:p-6 space-y-4">
                   {/* Order Items */}
                   <div className="space-y-3">
                     {items.map((item) => (
@@ -304,13 +304,13 @@ export const CheckoutPage = () => {
                         <img
                           src={item.image}
                           alt={item.name}
-                          className="h-12 w-12 rounded-md object-cover"
+                          className="h-10 w-10 sm:h-12 sm:w-12 rounded-md object-cover flex-shrink-0"
                         />
-                        <div className="flex-1">
-                          <h4 className="text-sm font-medium">{item.name}</h4>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-sm font-medium truncate">{item.name}</h4>
                           <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
                         </div>
-                        <div className="text-sm font-medium">
+                        <div className="text-sm font-medium flex-shrink-0">
                           ${(item.price * item.quantity).toFixed(2)}
                         </div>
                       </div>

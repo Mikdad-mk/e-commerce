@@ -6,16 +6,16 @@ import { Shield, Eye, Lock, Users, Mail, FileText } from "lucide-react";
 export const PrivacyPage = () => {
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
+      <div className="container mx-auto px-4 py-8 sm:py-12 max-w-4xl">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Privacy Policy – AVENZO</h1>
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Privacy Policy – AVENZO</h1>
           <p className="text-sm text-muted-foreground mt-2">
             Last updated: January 23, 2026
           </p>
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
           {/* Introduction */}
           <Card>
             <CardContent className="pt-6">

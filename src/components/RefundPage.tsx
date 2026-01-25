@@ -6,19 +6,19 @@ import { RotateCcw, Clock, CreditCard, Package, AlertCircle, CheckCircle, Mail, 
 export const RefundPage = () => {
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
+      <div className="container mx-auto px-4 py-8 sm:py-12 max-w-4xl">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Return & Refund Policy – AVENZO</h1>
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Return & Refund Policy – AVENZO</h1>
           <p className="text-sm text-muted-foreground mt-2">
             Last updated: January 23, 2026
           </p>
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
           {/* Introduction */}
           <Card>
-            <CardContent className="pt-6">
+            <CardContent className="p-4 sm:p-6">
               <p className="text-sm text-muted-foreground">
                 At AVENZO, we want you to be completely satisfied with your purchase. If you are not happy with your order, we're here to help.
               </p>
@@ -27,13 +27,13 @@ export const RefundPage = () => {
 
           {/* Returns */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
                 <RotateCcw className="h-5 w-5" />
                 Returns
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="p-4 sm:p-6 space-y-4 sm:space-y-6">
               <div className="border-l-4 border-muted pl-4">
                 <p className="text-sm text-muted-foreground font-medium">
                   We offer a 30-day return period from the date you receive your item.

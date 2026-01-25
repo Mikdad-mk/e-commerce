@@ -6,11 +6,11 @@ import { FileText, Scale, ShoppingCart, Shield, AlertTriangle, Mail } from "luci
 export const TermsPage = () => {
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
+      <div className="container mx-auto px-4 py-8 sm:py-12 max-w-4xl">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Terms of Service</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Terms of Service</h1>
+          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
             Please read these terms carefully before using our website and services.
           </p>
           <p className="text-sm text-muted-foreground mt-2">
@@ -18,16 +18,16 @@ export const TermsPage = () => {
           </p>
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
           {/* Acceptance of Terms */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
                 <FileText className="h-5 w-5" />
                 Acceptance of Terms
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="p-4 sm:p-6 space-y-4">
               <p className="text-sm text-muted-foreground">
                 By accessing and using the Avenzo website and services, you accept and agree to be bound by 
                 the terms and provision of this agreement. If you do not agree to abide by the above, 

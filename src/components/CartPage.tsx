@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingBag, Shield, Truck, Star, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -51,36 +51,48 @@ export const CartPage = () => {
   }
 
   return (
-    <div className="container py-8">
-      <div className="space-y-8">
+    <div className="container py-6 sm:py-8">
+      <div className="space-y-6 sm:space-y-8">
         {/* Header */}
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold">Shopping Cart</h1>
-          <p className="text-muted-foreground">
-            {items.length} {items.length === 1 ? "item" : "items"} in your cart
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-2">
+            <h1 className="text-2xl sm:text-3xl font-bold">Shopping Cart</h1>
+            <p className="text-muted-foreground">
+              {items.length} {items.length === 1 ? "item" : "items"} in your cart
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Shield className="h-4 w-4 text-green-500" />
+              <span>Secure checkout</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Truck className="h-4 w-4 text-blue-500" />
+              <span>Free shipping</span>
+            </div>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {items.map((item) => (
               <Card key={`${item.id}-${item.selectedColor}`}>
-                <CardContent className="p-6">
-                  <div className="flex items-start space-x-4">
+                <CardContent className="p-4 sm:p-6">
+                  <div className="flex flex-col sm:flex-row items-start space-y-4 sm:space-y-0 sm:space-x-4">
                     {/* Product Image */}
-                    <div className="flex-shrink-0">
+                    <div className="flex-shrink-0 w-full sm:w-auto">
                       <img
                         src={item.image}
                         alt={item.name}
-                        className="h-24 w-24 rounded-md object-cover"
+                        className="h-32 w-full sm:h-24 sm:w-24 rounded-md object-cover"
                       />
                     </div>
 
                     {/* Product Details */}
-                    <div className="flex-1 space-y-2">
-                      <div className="flex items-start justify-between">
-                        <div>
+                    <div className="flex-1 space-y-2 w-full">
+                      <div className="flex flex-col sm:flex-row items-start justify-between space-y-2 sm:space-y-0">
+                        <div className="w-full sm:w-auto">
                           <h3 className="font-medium">{item.name}</h3>
                           {item.selectedColor && (
                             <div className="flex items-center space-x-2 mt-1">
@@ -96,13 +108,13 @@ export const CartPage = () => {
                           variant="ghost"
                           size="icon"
                           onClick={() => handleRemoveItem(item.id)}
-                          className="text-muted-foreground hover:text-destructive"
+                          className="text-muted-foreground hover:text-destructive self-end sm:self-start"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
 
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-3 sm:space-y-0">
                         {/* Quantity Controls */}
                         <div className="flex items-center border rounded-md">
                           <Button
@@ -128,7 +140,7 @@ export const CartPage = () => {
                         </div>
 
                         {/* Price */}
-                        <div className="text-right">
+                        <div className="text-left sm:text-right">
                           <div className="font-semibold">
                             ${(item.price * item.quantity).toFixed(2)}
                           </div>

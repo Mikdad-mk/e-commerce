@@ -10,7 +10,6 @@ import { useCart } from "@/hooks/use-cart";
 const navItems = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/" },
-  { label: "Categories", href: "/" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
@@ -45,12 +44,6 @@ export const Header = () => {
 
         {/* Icons */}
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="icon" className="hidden sm:flex">
-            <Search className="h-5 w-5 text-foreground/80" />
-          </Button>
-          <Button variant="ghost" size="icon" className="hidden sm:flex">
-            <User className="h-5 w-5 text-foreground/80" />
-          </Button>
           <Button variant="ghost" size="icon" className="relative">
             <Heart className="h-5 w-5 text-foreground/80" />
             <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground">
