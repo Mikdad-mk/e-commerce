@@ -8,26 +8,14 @@ const footerLinks = {
   company: [
     { label: "About Us", href: "/about" },
     { label: "Contact", href: "/contact" },
-    { label: "Careers", href: "/careers" },
-    { label: "Press", href: "/press" },
   ],
   support: [
-    { label: "Help Center", href: "/help" },
     { label: "Shipping Info", href: "/shipping" },
-    { label: "Returns", href: "/returns" },
-    { label: "Size Guide", href: "/size-guide" },
   ],
   legal: [
     { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms of Service", href: "/terms" },
     { label: "Refund Policy", href: "/refund" },
-    { label: "Cookie Policy", href: "/cookies" },
-  ],
-  social: [
-    { label: "Instagram", href: "https://instagram.com/avenzo" },
-    { label: "Facebook", href: "https://facebook.com/avenzo" },
-    { label: "Twitter", href: "https://twitter.com/avenzo" },
-    { label: "Pinterest", href: "https://pinterest.com/avenzo" },
   ],
 };
 
@@ -70,7 +58,7 @@ export const Footer = () => {
 
       {/* Main Footer Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Company */}
           <div className="space-y-4">
             <h4 className="text-sm font-semibold uppercase tracking-wider text-foreground">
@@ -123,27 +111,6 @@ export const Footer = () => {
                   >
                     {link.label}
                   </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Social */}
-          <div className="space-y-4">
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-foreground">
-              Follow Us
-            </h4>
-            <ul className="space-y-3">
-              {footerLinks.social.map((link) => (
-                <li key={link.label}>
-                  <a 
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 block py-1"
-                  >
-                    {link.label}
-                  </a>
                 </li>
               ))}
             </ul>

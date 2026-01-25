@@ -267,11 +267,11 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
             </div>
             <div className="flex items-center space-x-2">
               <Shield className="h-5 w-5 text-primary" />
-              <span className="text-sm">2 Year Warranty</span>
+              <span className="text-sm">Quality Assured</span>
             </div>
             <div className="flex items-center space-x-2">
               <RotateCcw className="h-5 w-5 text-primary" />
-              <span className="text-sm">30 Day Returns</span>
+              <span className="text-sm">Easy Returns</span>
             </div>
           </div>
         </div>
