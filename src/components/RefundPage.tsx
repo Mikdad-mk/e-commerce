@@ -177,7 +177,7 @@ export const RefundPage = () => {
                   <div className="border rounded-lg p-4">
                     <h4 className="font-medium mb-2">Contact Customer Service</h4>
                     <p className="text-sm text-muted-foreground">
-                      Call us at +1 (555) 123-4567 or email support@avenzo.com
+                      Call us at +1 (555) 123-4567 or email support@avenzo.co
                     </p>
                   </div>
                 </div>
@@ -291,7 +291,7 @@ export const RefundPage = () => {
                   <div className="bg-gray-50 rounded-lg p-4">
                     <h3 className="font-semibold mb-2">Contact Information</h3>
                     <div className="space-y-1 text-sm">
-                      <p><strong>Email:</strong> returns@avenzo.com</p>
+                      <p><strong>Email:</strong> returns@avenzo.co</p>
                       <p><strong>Phone:</strong> +1 (555) 123-4567</p>
                       <p><strong>Hours:</strong> Mon-Fri 9AM-6PM EST</p>
                     </div>

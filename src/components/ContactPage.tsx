@@ -69,8 +69,8 @@ export const ContactPage = () => {
                     <Mail className="h-5 w-5 text-primary mt-1" />
                     <div>
                       <p className="font-medium">Email</p>
-                      <p className="text-sm text-muted-foreground">support@avenzo.com</p>
-                      <p className="text-sm text-muted-foreground">info@avenzo.com</p>
+                      <p className="text-sm text-muted-foreground">info@avenzo.co</p>
+                      <p className="text-sm text-muted-foreground">support@avenzo.co</p>
                     </div>
                   </div>
 
@@ -161,7 +161,7 @@ export const ContactPage = () => {
                         type="email"
                         value={formData.email}
                         onChange={(e) => handleInputChange('email', e.target.value)}
-                        placeholder="your.email@example.com"
+                        placeholder="your.email@avenzo.co"
                         required
                       />
                     </div>

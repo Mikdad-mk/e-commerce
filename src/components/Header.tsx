@@ -12,7 +12,7 @@ const navItems = [
   { label: "Shop", href: "/" },
   { label: "Categories", href: "/" },
   { label: "About", href: "/about" },
-  { label: "Contact", href: "/" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export const Header = () => {

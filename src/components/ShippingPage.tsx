@@ -186,7 +186,7 @@ export const ShippingPage = () => {
                   <h3 className="font-semibold text-blue-800 mb-2">Need Help?</h3>
                   <p className="text-sm text-blue-700">
                     Have questions about shipping? Contact our customer service team at 
-                    <span className="font-medium"> support@avenzo.com</span> or 
+                    <span className="font-medium"> support@avenzo.co</span> or 
                     <span className="font-medium"> +1 (555) 123-4567</span>.
                   </p>
                 </div>
