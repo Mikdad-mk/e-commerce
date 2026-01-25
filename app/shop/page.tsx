@@ -1,17 +1,13 @@
 import { Header } from "@/components/Header";
-import { HeroBanner } from "@/components/HeroBanner";
-import { FeaturedProducts } from "@/components/FeaturedProducts";
-import { FAQ } from "@/components/FAQ";
+import { ProductGrid } from "@/components/ProductGrid";
 import { Footer } from "@/components/Footer";
 
-export default function Home() {
+export default function Shop() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
       <main className="flex-1">
-        <HeroBanner />
-        <FeaturedProducts />
-        <FAQ />
+        <ProductGrid />
       </main>
       <Footer />
     </div>

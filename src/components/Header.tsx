@@ -9,7 +9,7 @@ import { useCart } from "@/hooks/use-cart";
 
 const navItems = [
   { label: "Home", href: "/" },
-  { label: "Shop", href: "/" },
+  { label: "Shop", href: "/shop" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];

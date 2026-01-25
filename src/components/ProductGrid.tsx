@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { ProductCard } from "./ProductCard";
 import { getProductsWithFallback, Product } from "@/lib/api";
 import { Button } from "@/components/ui/button";
-import { Loader2, RefreshCw } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 export const ProductGrid = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -12,15 +12,10 @@ export const ProductGrid = () => {
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [refreshing, setRefreshing] = useState(false);
 
-  const fetchProducts = async (page: number = 1, showRefreshing: boolean = false) => {
+  const fetchProducts = async (page: number = 1) => {
     try {
-      if (showRefreshing) {
-        setRefreshing(true);
-      } else {
-        setLoading(true);
-      }
+      setLoading(true);
       setError(null);
 
       const response = await getProductsWithFallback({
@@ -36,7 +31,6 @@ export const ProductGrid = () => {
       console.error('Error fetching products:', err);
     } finally {
       setLoading(false);
-      setRefreshing(false);
     }
   };
 
@@ -50,10 +44,6 @@ export const ProductGrid = () => {
       // Scroll to top of product grid
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  };
-
-  const handleRefresh = () => {
-    fetchProducts(currentPage, true);
   };
 
   if (loading) {
@@ -119,24 +109,12 @@ export const ProductGrid = () => {
 
   return (
     <section className="container py-8 md:py-12">
-      {/* Header with Refresh Button */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h2 className="text-2xl font-bold mb-2">Our Products</h2>
-          <p className="text-muted-foreground">
-            Discover our curated collection of home essentials
-          </p>
-        </div>
-        <Button
-          onClick={handleRefresh}
-          variant="outline"
-          size="sm"
-          disabled={refreshing}
-          className="flex items-center gap-2"
-        >
-          <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-          Refresh
-        </Button>
+      {/* Header */}
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold mb-2">Our Products</h2>
+        <p className="text-muted-foreground">
+          Discover our curated collection of home essentials
+        </p>
       </div>
 
       {/* Products Grid */}

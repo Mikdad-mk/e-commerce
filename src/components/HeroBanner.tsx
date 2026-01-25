@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+
 export const HeroBanner = () => {
   return (
     <section className="relative w-full overflow-hidden">
@@ -15,11 +18,16 @@ export const HeroBanner = () => {
                 New Collection
               </p>
               <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground">
-                Shop
+                Home Essentials
               </h1>
-              <p className="text-sm text-muted-foreground">
-                Home &gt; Shop
+              <p className="text-sm text-muted-foreground mb-6">
+                Discover our curated collection of premium home essentials
               </p>
+              <Link href="/shop">
+                <Button size="lg" className="bg-foreground text-background hover:bg-foreground/90">
+                  Shop Now
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
