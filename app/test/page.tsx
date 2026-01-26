@@ -20,6 +20,29 @@ export default function TestPage() {
     setTestResults(prev => [...prev, `${new Date().toLocaleTimeString()}: ${result}`]);
   };
 
+  const testCloudinaryBrowser = async () => {
+    addResult("Testing Cloudinary image browser...");
+    
+    try {
+      const response = await fetch('/api/cloudinary/images?max_results=5');
+      const data = await response.json();
+      
+      if (data.success) {
+        addResult(`✅ Cloudinary API working: Found ${data.images.length} images`);
+        if (data.images.length > 0) {
+          addResult(`✅ Sample image: ${data.images[0].filename} (${data.images[0].format})`);
+        }
+        if (data.next_cursor) {
+          addResult(`✅ Pagination available (next_cursor: ${data.next_cursor.substring(0, 20)}...)`);
+        }
+      } else {
+        addResult(`❌ Cloudinary API failed: ${data.error}`);
+      }
+    } catch (error) {
+      addResult(`❌ Cloudinary API request failed: ${error}`);
+    }
+  };
+
   const testCloudinaryUpload = async () => {
     setUploading(true);
     addResult("Starting Cloudinary upload test...");
@@ -176,9 +199,12 @@ export default function TestPage() {
           <CardTitle>Product System Test Page</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <Button onClick={testCloudinaryBrowser} disabled={!mounted}>
+              Test Cloudinary Browser
+            </Button>
             <Button onClick={testCloudinaryUpload} disabled={uploading || !mounted}>
-              {uploading ? "Uploading..." : "Test Cloudinary"}
+              {uploading ? "Uploading..." : "Test Cloudinary Upload"}
             </Button>
             <Button onClick={testLocalStorage} disabled={!mounted}>
               Test LocalStorage

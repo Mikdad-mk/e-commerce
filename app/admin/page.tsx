@@ -11,6 +11,7 @@ import { Upload, RefreshCw, X, Trash2, Eye, LogOut, Clock, Plus } from "lucide-r
 import { Product } from "@/lib/api";
 import { isAuthenticated, logout, getSessionTimeRemaining, extendSession } from "@/lib/auth";
 import { AdminLogin } from "@/components/AdminLogin";
+import { CloudinaryImageBrowser } from "@/components/CloudinaryImageBrowser";
 
 export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -21,6 +22,7 @@ export default function AdminPage() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+  const [imageSelectionMode, setImageSelectionMode] = useState<'upload' | 'browse'>('upload');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Form state
@@ -181,6 +183,15 @@ export default function AdminPage() {
   const handleRemovePreview = (index: number) => {
     setSelectedFiles(prev => prev.filter((_, i) => i !== index));
     setPreviewUrls(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleCloudinaryImagesSelected = (images: string[]) => {
+    setFormData(prev => ({
+      ...prev,
+      images: images
+    }));
+    setUploadedImages(images);
+    console.log('Selected images from Cloudinary:', images);
   };
 
   const handleRemoveUploadedImage = (index: number) => {
@@ -388,88 +399,125 @@ export default function AdminPage() {
                 />
               </div>
 
-              {/* Multiple Image Upload Section */}
+              {/* Multiple Image Selection Section */}
               <div className="space-y-4">
                 <Label>Product Images * (Multiple images supported)</Label>
                 
-                {/* File Input */}
-                <div className="flex items-center gap-4">
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handleFileSelect}
-                    className="hidden"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={uploading}
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Select Images
-                  </Button>
-                  
-                  {selectedFiles.length > 0 && (
+                {/* Image Selection Mode Toggle */}
+                <div className="flex items-center space-x-4 p-4 bg-secondary/20 rounded-lg">
+                  <span className="text-sm font-medium">Image Selection Method:</span>
+                  <div className="flex items-center space-x-2">
                     <Button
                       type="button"
-                      onClick={handleUploadImages}
-                      disabled={uploading}
+                      variant={imageSelectionMode === 'upload' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setImageSelectionMode('upload')}
                     >
-                      {uploading ? (
-                        <>
-                          <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                          Uploading {selectedFiles.length} images...
-                        </>
-                      ) : (
-                        <>
-                          <Upload className="h-4 w-4 mr-2" />
-                          Upload {selectedFiles.length} images to Cloudinary
-                        </>
-                      )}
+                      Upload New Images
                     </Button>
-                  )}
+                    <Button
+                      type="button"
+                      variant={imageSelectionMode === 'browse' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setImageSelectionMode('browse')}
+                    >
+                      Browse Cloudinary Images
+                    </Button>
+                  </div>
                 </div>
 
-                {/* Selected Files Preview */}
-                {previewUrls.length > 0 && (
-                  <div>
-                    <Label className="text-sm text-muted-foreground">Selected Images (Ready to Upload)</Label>
-                    <div className="grid grid-cols-3 gap-2 mt-2">
-                      {previewUrls.map((url, index) => (
-                        <div key={index} className="relative">
-                          <img
-                            src={url}
-                            alt={`Preview ${index + 1}`}
-                            className="w-full h-20 object-cover rounded border"
-                          />
-                          <Button
-                            type="button"
-                            variant="destructive"
-                            size="sm"
-                            className="absolute -top-1 -right-1 h-6 w-6 p-0"
-                            onClick={() => handleRemovePreview(index)}
-                          >
-                            <X className="h-3 w-3" />
-                          </Button>
-                        </div>
-                      ))}
+                {imageSelectionMode === 'upload' ? (
+                  // Upload Mode
+                  <>
+                    {/* File Input */}
+                    <div className="flex items-center gap-4">
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleFileSelect}
+                        className="hidden"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={uploading}
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        Select Images
+                      </Button>
+                      
+                      {selectedFiles.length > 0 && (
+                        <Button
+                          type="button"
+                          onClick={handleUploadImages}
+                          disabled={uploading}
+                        >
+                          {uploading ? (
+                            <>
+                              <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                              Uploading {selectedFiles.length} images...
+                            </>
+                          ) : (
+                            <>
+                              <Upload className="h-4 w-4 mr-2" />
+                              Upload {selectedFiles.length} images to Cloudinary
+                            </>
+                          )}
+                        </Button>
+                      )}
                     </div>
-                  </div>
+
+                    {/* Selected Files Preview */}
+                    {previewUrls.length > 0 && (
+                      <div>
+                        <Label className="text-sm text-muted-foreground">Selected Images (Ready to Upload)</Label>
+                        <div className="grid grid-cols-3 gap-2 mt-2">
+                          {previewUrls.map((url, index) => (
+                            <div key={index} className="relative">
+                              <img
+                                src={url}
+                                alt={`Preview ${index + 1}`}
+                                className="w-full h-20 object-cover rounded border"
+                              />
+                              <Button
+                                type="button"
+                                variant="destructive"
+                                size="sm"
+                                className="absolute -top-1 -right-1 h-6 w-6 p-0"
+                                onClick={() => handleRemovePreview(index)}
+                              >
+                                <X className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  // Browse Mode
+                  <CloudinaryImageBrowser
+                    onImagesSelected={handleCloudinaryImagesSelected}
+                    selectedImages={formData.images}
+                    maxSelection={10}
+                  />
                 )}
 
-                {/* Uploaded Images */}
+                {/* Uploaded/Selected Images Display */}
                 {uploadedImages.length > 0 && (
                   <div>
-                    <Label className="text-sm text-green-600">Uploaded Images ({uploadedImages.length})</Label>
+                    <Label className="text-sm text-green-600">
+                      {imageSelectionMode === 'upload' ? 'Uploaded' : 'Selected'} Images ({uploadedImages.length})
+                    </Label>
                     <div className="grid grid-cols-3 gap-2 mt-2">
                       {uploadedImages.map((url, index) => (
                         <div key={index} className="relative">
                           <img
                             src={url}
-                            alt={`Uploaded ${index + 1}`}
+                            alt={`${imageSelectionMode === 'upload' ? 'Uploaded' : 'Selected'} ${index + 1}`}
                             className="w-full h-20 object-cover rounded border border-green-200"
                           />
                           <Button
@@ -592,9 +640,9 @@ export default function AdminPage() {
             <h4 className="font-semibold mb-2 text-blue-800">🚀 How to Add Products:</h4>
             <ol className="list-decimal list-inside space-y-2 text-sm text-blue-700">
               <li><strong>Fill Product Details:</strong> Enter product name, price, description, and category</li>
-              <li><strong>Select Images:</strong> Click "Select Images" and choose multiple image files</li>
-              <li><strong>Upload to Cloudinary:</strong> Click "Upload X images to Cloudinary" button</li>
-              <li><strong>Wait for Upload:</strong> Wait for all images to upload successfully (green checkmarks)</li>
+              <li><strong>Choose Image Method:</strong> Select "Upload New Images" or "Browse Cloudinary Images"</li>
+              <li><strong>Upload Method:</strong> Select files → Upload to Cloudinary → Submit product</li>
+              <li><strong>Browse Method:</strong> Browse existing Cloudinary images → Select images → Submit product</li>
               <li><strong>Submit Product:</strong> Click "Add Product" button to save</li>
               <li><strong>Verify:</strong> Check that the product appears in the "Stored Products" section</li>
             </ol>
@@ -603,9 +651,11 @@ export default function AdminPage() {
           <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
             <h4 className="font-semibold mb-2 text-green-800">✅ Features:</h4>
             <ul className="list-disc list-inside space-y-1 text-sm text-green-700">
-              <li>Upload multiple Cloudinary images per product</li>
+              <li>Upload new images to Cloudinary OR browse existing Cloudinary images</li>
+              <li>Browse and search through all your Cloudinary images</li>
+              <li>Select multiple images from your Cloudinary library</li>
               <li>Real-time upload progress and status</li>
-              <li>Image preview before and after upload</li>
+              <li>Image preview before and after selection</li>
               <li>First image automatically becomes main product image</li>
               <li>Products automatically appear on shop and home pages</li>
               <li>Individual image removal capability</li>
