@@ -23,6 +23,7 @@ export const FeaturedProducts = () => {
       });
 
       setProducts(response.products);
+      console.log('FeaturedProducts loaded products:', response.products.length);
     } catch (err) {
       setError('Failed to load featured products.');
       console.error('Error fetching featured products:', err);
@@ -33,6 +34,27 @@ export const FeaturedProducts = () => {
 
   useEffect(() => {
     fetchFeaturedProducts();
+    
+    // Listen for localStorage changes to refresh products when admin adds new ones
+    const handleStorageChange = () => {
+      console.log('localStorage changed, refreshing featured products...');
+      fetchFeaturedProducts();
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Also listen for custom events from admin panel
+    const handleProductsUpdated = () => {
+      console.log('Products updated event received, refreshing featured products...');
+      fetchFeaturedProducts();
+    };
+    
+    window.addEventListener('productsUpdated', handleProductsUpdated);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('productsUpdated', handleProductsUpdated);
+    };
   }, []);
 
   if (loading) {

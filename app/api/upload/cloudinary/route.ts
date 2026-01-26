@@ -34,8 +34,7 @@ export async function POST(request: NextRequest) {
     const cloudinaryFormData = new FormData();
     cloudinaryFormData.append('file', file);
     cloudinaryFormData.append('upload_preset', 'ml_default'); // Use default unsigned preset
-    cloudinaryFormData.append('folder', 'avenzo_products');
-
+    
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
     
     // Upload to Cloudinary using unsigned upload

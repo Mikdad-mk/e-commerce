@@ -436,15 +436,19 @@ function getLocalProducts(params?: {
   if (typeof window !== 'undefined') {
     try {
       const storedProducts = JSON.parse(localStorage.getItem('avenzo_products') || '[]');
-      allProducts = [...storedProducts];
+      if (storedProducts && Array.isArray(storedProducts) && storedProducts.length > 0) {
+        allProducts = [...storedProducts];
+        console.log('Loaded admin products from localStorage:', storedProducts.length);
+      }
     } catch (e) {
       console.warn('Failed to load products from localStorage:', e);
     }
   }
   
-  // If no products in localStorage, show fallback products for demo
+  // If no admin products in localStorage, show fallback products for demo
   if (allProducts.length === 0) {
     allProducts = [...fallbackProducts];
+    console.log('Using fallback products:', fallbackProducts.length);
   }
   
   // Filter products based on params
@@ -483,7 +487,10 @@ function getLocalProductById(id: string): Product | null {
     try {
       const storedProducts = JSON.parse(localStorage.getItem('avenzo_products') || '[]');
       const storedProduct = storedProducts.find((p: Product) => p.id === id);
-      if (storedProduct) return storedProduct;
+      if (storedProduct) {
+        console.log('Found admin product in localStorage:', storedProduct.name);
+        return storedProduct;
+      }
     } catch (e) {
       console.warn('Failed to load product from localStorage:', e);
     }
@@ -491,9 +498,14 @@ function getLocalProductById(id: string): Product | null {
   
   // Check fallback products only for demo product IDs (1-8) - for direct access
   if (['1', '2', '3', '4', '5', '6', '7', '8'].includes(id)) {
-    return fallbackProducts.find(p => p.id === id) || null;
+    const fallbackProduct = fallbackProducts.find(p => p.id === id);
+    if (fallbackProduct) {
+      console.log('Found fallback product:', fallbackProduct.name);
+      return fallbackProduct;
+    }
   }
   
+  console.log('Product not found:', id);
   return null;
 }
 

@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Upload, RefreshCw, X, Trash2, Eye, LogOut, Clock, Image as ImageIcon } from "lucide-react";
+import { Upload, RefreshCw, X, Trash2, Eye, LogOut, Clock, Plus } from "lucide-react";
 import { Product } from "@/lib/api";
 import { isAuthenticated, logout, getSessionTimeRemaining, extendSession } from "@/lib/auth";
 import { AdminLogin } from "@/components/AdminLogin";
@@ -18,8 +18,9 @@ export default function AdminPage() {
   const [uploading, setUploading] = useState(false);
   const [storedProducts, setStoredProducts] = useState<Product[]>([]);
   const [sessionTimeLeft, setSessionTimeLeft] = useState<number>(0);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string>("");
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Form state
@@ -29,7 +30,7 @@ export default function AdminPage() {
     originalPrice: "",
     description: "",
     category: "",
-    image: "",
+    images: [] as string[],
   });
 
   useEffect(() => {
@@ -78,91 +79,131 @@ export default function AdminPage() {
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // Validate file
-      const maxSize = 5 * 1024 * 1024; // 5MB
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
 
+    // Validate files
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    const validFiles: File[] = [];
+    const newPreviewUrls: string[] = [];
+
+    files.forEach(file => {
       if (!allowedTypes.includes(file.type)) {
-        toast.error('Invalid file type. Please upload JPEG, PNG, WebP, or GIF images.');
+        toast.error(`Invalid file type for ${file.name}. Please upload JPEG, PNG, WebP, or GIF images.`);
         return;
       }
 
       if (file.size > maxSize) {
-        toast.error('File size too large. Please upload images smaller than 5MB.');
+        toast.error(`File ${file.name} is too large. Please upload images smaller than 5MB.`);
         return;
       }
 
-      setSelectedFile(file);
+      validFiles.push(file);
       
       // Create preview
       const reader = new FileReader();
       reader.onload = (e) => {
-        setPreviewUrl(e.target?.result as string);
+        newPreviewUrls.push(e.target?.result as string);
+        if (newPreviewUrls.length === validFiles.length) {
+          setPreviewUrls(prev => [...prev, ...newPreviewUrls]);
+        }
       };
       reader.readAsDataURL(file);
-    }
+    });
+
+    setSelectedFiles(prev => [...prev, ...validFiles]);
   };
 
-  const handleUploadImage = async () => {
-    if (!selectedFile) {
-      toast.error('Please select an image first');
+  const handleUploadImages = async () => {
+    if (selectedFiles.length === 0) {
+      toast.error('Please select images first');
       return;
     }
 
     setUploading(true);
+    const uploadedUrls: string[] = [];
 
     try {
-      const formData = new FormData();
-      formData.append('file', selectedFile);
+      console.log(`Starting upload of ${selectedFiles.length} files...`);
+      
+      // Upload files one by one
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        console.log(`Uploading file ${i + 1}/${selectedFiles.length}: ${file.name}`);
+        
+        const formData = new FormData();
+        formData.append('file', file);
 
-      const response = await fetch('/api/upload/cloudinary', {
-        method: 'POST',
-        body: formData,
-      });
+        const response = await fetch('/api/upload/cloudinary', {
+          method: 'POST',
+          body: formData,
+        });
 
-      const result = await response.json();
+        const result = await response.json();
+        console.log(`Upload result for ${file.name}:`, result);
 
-      if (result.success) {
-        setFormData(prev => ({
-          ...prev,
-          image: result.imageUrl
-        }));
-        toast.success('Image uploaded successfully!');
-        setSelectedFile(null);
-        setPreviewUrl("");
-        if (fileInputRef.current) {
-          fileInputRef.current.value = "";
+        if (result.success) {
+          uploadedUrls.push(result.imageUrl);
+          toast.success(`Image ${i + 1}/${selectedFiles.length} uploaded successfully!`);
+        } else {
+          console.error(`Upload failed for ${file.name}:`, result);
+          toast.error(`Failed to upload ${file.name}: ${result.error}`);
         }
-      } else {
-        toast.error(result.error || 'Failed to upload image');
       }
+
+      console.log(`Successfully uploaded ${uploadedUrls.length} images:`, uploadedUrls);
+
+      // Update form data with uploaded images
+      setFormData(prev => ({
+        ...prev,
+        images: [...prev.images, ...uploadedUrls]
+      }));
+
+      setUploadedImages(prev => [...prev, ...uploadedUrls]);
+
+      // Clear selected files and previews
+      setSelectedFiles([]);
+      setPreviewUrls([]);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+
+      toast.success(`Successfully uploaded ${uploadedUrls.length} images!`);
     } catch (error) {
       console.error('Upload error:', error);
-      toast.error('Failed to upload image');
+      toast.error('Failed to upload images');
     } finally {
       setUploading(false);
     }
   };
 
-  const handleRemoveImage = () => {
+  const handleRemovePreview = (index: number) => {
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+    setPreviewUrls(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleRemoveUploadedImage = (index: number) => {
     setFormData(prev => ({
       ...prev,
-      image: ""
+      images: prev.images.filter((_, i) => i !== index)
     }));
-    setSelectedFile(null);
-    setPreviewUrl("");
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+    setUploadedImages(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.price || !formData.description || !formData.image) {
-      toast.error('Please fill in all required fields and upload an image');
+    console.log('Form submission started with data:', formData);
+    
+    if (!formData.name || !formData.price || !formData.description || formData.images.length === 0) {
+      console.error('Form validation failed:', {
+        name: !!formData.name,
+        price: !!formData.price,
+        description: !!formData.description,
+        imagesCount: formData.images.length
+      });
+      toast.error('Please fill in all required fields and upload at least one image');
       return;
     }
 
@@ -176,16 +217,25 @@ export default function AdminPage() {
         originalPrice: formData.originalPrice ? parseFloat(formData.originalPrice) : undefined,
         description: formData.description,
         category: formData.category || 'Home Essentials',
-        image: formData.image,
+        image: formData.images[0], // First image as main image
+        images: formData.images, // All images
         inStock: true,
         rating: 4.5,
         reviews: Math.floor(Math.random() * 100) + 10,
       };
 
+      console.log('Creating new product:', newProduct);
+
       // Save to localStorage
       const existingProducts = JSON.parse(localStorage.getItem('avenzo_products') || '[]');
       const updatedProducts = [...existingProducts, newProduct];
       localStorage.setItem('avenzo_products', JSON.stringify(updatedProducts));
+
+      console.log('Product saved to localStorage. Total products:', updatedProducts.length);
+
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new CustomEvent('productsUpdated'));
+      console.log('Products updated event dispatched');
 
       // Reset form
       setFormData({
@@ -194,8 +244,9 @@ export default function AdminPage() {
         originalPrice: "",
         description: "",
         category: "",
-        image: "",
+        images: [],
       });
+      setUploadedImages([]);
 
       loadStoredProducts();
       toast.success('Product added successfully!');
@@ -212,6 +263,9 @@ export default function AdminPage() {
       const existingProducts = JSON.parse(localStorage.getItem('avenzo_products') || '[]');
       const updatedProducts = existingProducts.filter((p: Product) => p.id !== productId);
       localStorage.setItem('avenzo_products', JSON.stringify(updatedProducts));
+      
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new CustomEvent('productsUpdated'));
       
       loadStoredProducts();
       toast.success('Product deleted successfully!');
@@ -248,7 +302,7 @@ export default function AdminPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <p className="text-muted-foreground">Manage your products with Cloudinary image uploads</p>
+          <p className="text-muted-foreground">Manage your products with multiple Cloudinary image uploads</p>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -328,9 +382,9 @@ export default function AdminPage() {
                 />
               </div>
 
-              {/* Image Upload Section */}
+              {/* Multiple Image Upload Section */}
               <div className="space-y-4">
-                <Label>Product Image *</Label>
+                <Label>Product Images * (Multiple images supported)</Label>
                 
                 {/* File Input */}
                 <div className="flex items-center gap-4">
@@ -338,6 +392,7 @@ export default function AdminPage() {
                     ref={fileInputRef}
                     type="file"
                     accept="image/*"
+                    multiple
                     onChange={handleFileSelect}
                     className="hidden"
                   />
@@ -347,59 +402,87 @@ export default function AdminPage() {
                     onClick={() => fileInputRef.current?.click()}
                     disabled={uploading}
                   >
-                    <ImageIcon className="h-4 w-4 mr-2" />
-                    Select Image
+                    <Plus className="h-4 w-4 mr-2" />
+                    Select Images
                   </Button>
                   
-                  {selectedFile && (
+                  {selectedFiles.length > 0 && (
                     <Button
                       type="button"
-                      onClick={handleUploadImage}
+                      onClick={handleUploadImages}
                       disabled={uploading}
                     >
                       {uploading ? (
                         <>
                           <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                          Uploading...
+                          Uploading {selectedFiles.length} images...
                         </>
                       ) : (
                         <>
                           <Upload className="h-4 w-4 mr-2" />
-                          Upload to Cloudinary
+                          Upload {selectedFiles.length} images to Cloudinary
                         </>
                       )}
                     </Button>
                   )}
                 </div>
 
-                {/* Preview */}
-                {previewUrl && (
-                  <div className="relative w-32 h-32 border rounded-lg overflow-hidden">
-                    <img
-                      src={previewUrl}
-                      alt="Preview"
-                      className="w-full h-full object-cover"
-                    />
+                {/* Selected Files Preview */}
+                {previewUrls.length > 0 && (
+                  <div>
+                    <Label className="text-sm text-muted-foreground">Selected Images (Ready to Upload)</Label>
+                    <div className="grid grid-cols-3 gap-2 mt-2">
+                      {previewUrls.map((url, index) => (
+                        <div key={index} className="relative">
+                          <img
+                            src={url}
+                            alt={`Preview ${index + 1}`}
+                            className="w-full h-20 object-cover rounded border"
+                          />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="sm"
+                            className="absolute -top-1 -right-1 h-6 w-6 p-0"
+                            onClick={() => handleRemovePreview(index)}
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
 
-                {/* Uploaded Image */}
-                {formData.image && (
-                  <div className="relative w-32 h-32 border rounded-lg overflow-hidden">
-                    <img
-                      src={formData.image}
-                      alt="Uploaded"
-                      className="w-full h-full object-cover"
-                    />
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="sm"
-                      className="absolute top-1 right-1"
-                      onClick={handleRemoveImage}
-                    >
-                      <X className="h-3 w-3" />
-                    </Button>
+                {/* Uploaded Images */}
+                {uploadedImages.length > 0 && (
+                  <div>
+                    <Label className="text-sm text-green-600">Uploaded Images ({uploadedImages.length})</Label>
+                    <div className="grid grid-cols-3 gap-2 mt-2">
+                      {uploadedImages.map((url, index) => (
+                        <div key={index} className="relative">
+                          <img
+                            src={url}
+                            alt={`Uploaded ${index + 1}`}
+                            className="w-full h-20 object-cover rounded border border-green-200"
+                          />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="sm"
+                            className="absolute -top-1 -right-1 h-6 w-6 p-0"
+                            onClick={() => handleRemoveUploadedImage(index)}
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                          {index === 0 && (
+                            <div className="absolute bottom-0 left-0 right-0 bg-green-600 text-white text-xs text-center py-1 rounded-b">
+                              Main Image
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
@@ -417,14 +500,14 @@ export default function AdminPage() {
                 />
               </div>
 
-              <Button type="submit" className="w-full" disabled={loading || !formData.image}>
+              <Button type="submit" className="w-full" disabled={loading || formData.images.length === 0}>
                 {loading ? (
                   <>
                     <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
                     Adding Product...
                   </>
                 ) : (
-                  'Add Product'
+                  `Add Product ${formData.images.length > 0 ? `(${formData.images.length} images)` : ''}`
                 )}
               </Button>
             </form>
@@ -455,7 +538,14 @@ export default function AdminPage() {
                     />
                     <div className="flex-1 min-w-0">
                       <p className="font-medium truncate">{product.name}</p>
-                      <p className="text-sm text-muted-foreground">${product.price}</p>
+                      <p className="text-sm text-muted-foreground">
+                        ${product.price}
+                        {product.images && product.images.length > 1 && (
+                          <span className="ml-2 text-xs bg-secondary px-1 rounded">
+                            {product.images.length} images
+                          </span>
+                        )}
+                      </p>
                     </div>
                     <div className="flex items-center gap-2">
                       <Button
@@ -487,49 +577,58 @@ export default function AdminPage() {
       </div>
 
       {/* Instructions */}
-      {/* <Card className="mt-8">
+      <Card className="mt-8">
         <CardHeader>
-          <CardTitle>Cloudinary Setup Instructions</CardTitle>
+          <CardTitle>📋 Step-by-Step Guide</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
-            <h4 className="font-semibold mb-2 text-yellow-800">⚠️ Setup Required</h4>
-            <p className="text-sm text-yellow-700 mb-3">
-              To enable image uploads, you need to configure an unsigned upload preset in your Cloudinary account:
-            </p>
-            <ol className="list-decimal list-inside space-y-2 text-sm text-yellow-700">
-              <li>Go to <a href="https://console.cloudinary.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Cloudinary Console</a></li>
-              <li>Navigate to <strong>Settings → Upload → Upload presets</strong></li>
-              <li>Click <strong>"Add upload preset"</strong></li>
-              <li>Set the preset name to: <code className="bg-yellow-100 px-1 rounded">ml_default</code></li>
-              <li>Set <strong>Signing Mode</strong> to <strong>"Unsigned"</strong></li>
-              <li>In the <strong>Upload Options</strong> tab, set <strong>Folder</strong> to: <code className="bg-yellow-100 px-1 rounded">avenzo_products</code></li>
-              <li>Click <strong>"Save"</strong></li>
+          <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+            <h4 className="font-semibold mb-2 text-blue-800">🚀 How to Add Products:</h4>
+            <ol className="list-decimal list-inside space-y-2 text-sm text-blue-700">
+              <li><strong>Fill Product Details:</strong> Enter product name, price, description, and category</li>
+              <li><strong>Select Images:</strong> Click "Select Images" and choose multiple image files</li>
+              <li><strong>Upload to Cloudinary:</strong> Click "Upload X images to Cloudinary" button</li>
+              <li><strong>Wait for Upload:</strong> Wait for all images to upload successfully (green checkmarks)</li>
+              <li><strong>Submit Product:</strong> Click "Add Product" button to save</li>
+              <li><strong>Verify:</strong> Check that the product appears in the "Stored Products" section</li>
             </ol>
           </div>
           
-          <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
-            <h4 className="font-semibold mb-2 text-blue-800">Current Configuration:</h4>
-            <div className="text-sm text-blue-700 space-y-1">
-              <p><strong>Cloud Name:</strong> dyojqambm</p>
-              <p><strong>Upload Preset:</strong> ml_default (unsigned)</p>
-              <p><strong>Storage Folder:</strong> avenzo_products</p>
-              <p><strong>Max File Size:</strong> 5MB</p>
-              <p><strong>Supported Formats:</strong> JPEG, PNG, WebP, GIF</p>
-            </div>
+          <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
+            <h4 className="font-semibold mb-2 text-green-800">✅ Features:</h4>
+            <ul className="list-disc list-inside space-y-1 text-sm text-green-700">
+              <li>Upload multiple images per product</li>
+              <li>Real-time upload progress and status</li>
+              <li>Image preview before and after upload</li>
+              <li>First image automatically becomes main product image</li>
+              <li>Products automatically appear on shop and home pages</li>
+              <li>Individual image removal capability</li>
+            </ul>
           </div>
 
-          <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
-            <h4 className="font-semibold mb-2 text-green-800">✅ After Setup:</h4>
-            <ul className="list-disc list-inside space-y-1 text-sm text-green-700">
-              <li>Images will upload directly to your Cloudinary account</li>
-              <li>Automatic optimization and CDN delivery</li>
-              <li>Images organized in the "avenzo_products" folder</li>
-              <li>Secure, fast, and reliable image hosting</li>
+          <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+            <h4 className="font-semibold mb-2 text-yellow-800">⚠️ Important Notes:</h4>
+            <ul className="list-disc list-inside space-y-1 text-sm text-yellow-700">
+              <li>You must upload images to Cloudinary BEFORE submitting the product</li>
+              <li>Maximum file size: 5MB per image</li>
+              <li>Supported formats: JPEG, PNG, WebP, GIF</li>
+              <li>Products are stored locally in your browser</li>
+              <li>Use the test page (/test) to debug any issues</li>
+            </ul>
+          </div>
+
+          <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
+            <h4 className="font-semibold mb-2 text-gray-800">🔧 Troubleshooting:</h4>
+            <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+              <li>If products don't appear on shop page, try refreshing the page</li>
+              <li>If Cloudinary upload fails, check your internet connection</li>
+              <li>Visit <a href="/test" className="text-blue-600 underline">/test</a> to run diagnostic tests</li>
+              <li>Visit <a href="/debug" className="text-blue-600 underline">/debug</a> to see product loading status</li>
+              <li>Check browser console for detailed error messages</li>
             </ul>
           </div>
         </CardContent>
-      </Card> */}
+      </Card>
     </div>
   );
 }

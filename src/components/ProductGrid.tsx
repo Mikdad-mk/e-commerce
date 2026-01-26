@@ -26,6 +26,8 @@ export const ProductGrid = () => {
       setProducts(response.products);
       setCurrentPage(response.page);
       setTotalPages(response.totalPages);
+      
+      console.log('ProductGrid loaded products:', response.products.length);
     } catch (err) {
       setError('Failed to load products. Please try again.');
       console.error('Error fetching products:', err);
@@ -36,6 +38,27 @@ export const ProductGrid = () => {
 
   useEffect(() => {
     fetchProducts(1);
+    
+    // Listen for localStorage changes to refresh products when admin adds new ones
+    const handleStorageChange = () => {
+      console.log('localStorage changed, refreshing products...');
+      fetchProducts(currentPage);
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Also listen for custom events from admin panel
+    const handleProductsUpdated = () => {
+      console.log('Products updated event received, refreshing...');
+      fetchProducts(currentPage);
+    };
+    
+    window.addEventListener('productsUpdated', handleProductsUpdated);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('productsUpdated', handleProductsUpdated);
+    };
   }, []);
 
   const handlePageChange = (page: number) => {

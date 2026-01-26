@@ -8,7 +8,7 @@ export async function GET(
   try {
     const { id } = await params;
     
-    // Find product in fallback data
+    // Find product in fallback data first
     const product = fallbackProducts.find(p => p.id === id);
     
     if (product) {
@@ -17,8 +17,9 @@ export async function GET(
     
     // If not found in fallback data, it might be a user-created product
     // These are stored in localStorage on the client side
+    // Admin-created products have timestamp-based IDs or start with 'prod_'
     // Return a special response indicating client-side lookup is needed
-    if (id.startsWith('prod_')) {
+    if (id.startsWith('prod_') || /^\d+$/.test(id)) {
       return NextResponse.json(
         { 
           error: 'Product requires client-side lookup',
