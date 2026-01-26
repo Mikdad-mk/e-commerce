@@ -10,7 +10,7 @@ interface ProductCardProps {
   name: string;
   price: number;
   image: string;
-  colors: string[];
+  colors?: string[];
   isNew?: boolean;
   onSale?: boolean;
   originalPrice?: number;
@@ -104,24 +104,26 @@ export const ProductCard = ({
           </div>
 
           {/* Color Options */}
-          <div className="flex items-center gap-1.5 pt-1">
-            {colors.slice(0, 4).map((color, index) => (
-              <button
-                key={index}
-                className="color-dot"
-                style={{ backgroundColor: color }}
-                aria-label={`Color option ${index + 1}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  // Handle color selection
-                }}
-              />
-            ))}
-            {colors.length > 4 && (
-              <span className="text-xs text-muted-foreground">+{colors.length - 4}</span>
-            )}
-          </div>
+          {colors && colors.length > 0 && (
+            <div className="flex items-center gap-1.5 pt-1">
+              {colors.slice(0, 4).map((color, index) => (
+                <button
+                  key={index}
+                  className="color-dot"
+                  style={{ backgroundColor: color }}
+                  aria-label={`Color option ${index + 1}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    // Handle color selection
+                  }}
+                />
+              ))}
+              {colors.length > 4 && (
+                <span className="text-xs text-muted-foreground">+{colors.length - 4}</span>
+              )}
+            </div>
+          )}
         </div>
       </Link>
     </article>

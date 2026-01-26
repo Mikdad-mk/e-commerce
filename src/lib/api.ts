@@ -5,17 +5,17 @@ export interface Product {
   price: number;
   originalPrice?: number;
   image: string;
-  images: string[];
-  colors: string[];
+  images?: string[];
+  colors?: string[];
   isNew?: boolean;
   onSale?: boolean;
   description: string;
-  features: string[];
-  dimensions: string;
-  material: string;
-  care: string;
+  features?: string[];
+  dimensions?: string;
+  material?: string;
+  care?: string;
   inStock: boolean;
-  stockCount: number;
+  stockCount?: number;
   category?: string;
   brand?: string;
   rating?: number;
@@ -430,18 +430,21 @@ function getLocalProducts(params?: {
   category?: string;
   search?: string;
 }): { products: Product[]; total: number; page: number; totalPages: number } {
-  // Only get products from localStorage (admin-created products)
   let allProducts: Product[] = [];
   
-  // Add products from localStorage if available
+  // Add products from localStorage if available (admin-created products)
   if (typeof window !== 'undefined') {
     try {
       const storedProducts = JSON.parse(localStorage.getItem('avenzo_products') || '[]');
-      // Only include admin-created products (those with prod_ prefix)
-      allProducts = storedProducts.filter((product: Product) => product.id.startsWith('prod_'));
+      allProducts = [...storedProducts];
     } catch (e) {
       console.warn('Failed to load products from localStorage:', e);
     }
+  }
+  
+  // If no products in localStorage, show fallback products for demo
+  if (allProducts.length === 0) {
+    allProducts = [...fallbackProducts];
   }
   
   // Filter products based on params
