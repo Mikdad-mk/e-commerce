@@ -4,12 +4,13 @@ import Product from '@/models/Product';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
     
-    const product = await Product.findById(params.id).lean();
+    const { id } = await params;
+    const product = await Product.findById(id).lean();
 
     if (!product) {
       return NextResponse.json(
@@ -37,15 +38,16 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
     
+    const { id } = await params;
     const productData = await request.json();
 
     const updatedProduct = await Product.findByIdAndUpdate(
-      params.id,
+      id,
       {
         $set: {
           name: productData.name,
@@ -93,12 +95,13 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
 
-    const deletedProduct = await Product.findByIdAndDelete(params.id);
+    const { id } = await params;
+    const deletedProduct = await Product.findByIdAndDelete(id);
 
     if (!deletedProduct) {
       return NextResponse.json(
