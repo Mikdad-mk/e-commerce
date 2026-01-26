@@ -7,7 +7,7 @@ export interface Product {
   image: string;
   images?: string[];
   colors?: string[];
-  isNew?: boolean;
+  isNewProduct?: boolean;
   onSale?: boolean;
   description: string;
   features?: string[];

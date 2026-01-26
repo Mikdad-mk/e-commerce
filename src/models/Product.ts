@@ -17,7 +17,7 @@ export interface IProduct extends Document {
   stockCount: number;
   rating: number;
   reviews: number;
-  isNew: boolean;
+  isNewProduct: boolean;
   onSale: boolean;
   brand: string;
   createdAt: Date;
@@ -42,7 +42,7 @@ const ProductSchema: Schema = new Schema(
     stockCount: { type: Number, default: 10 },
     rating: { type: Number, default: 4.5 },
     reviews: { type: Number, default: 0 },
-    isNew: { type: Boolean, default: true },
+    isNewProduct: { type: Boolean, default: true },
     onSale: { type: Boolean, default: false },
     brand: { type: String, default: 'Avenzo' },
   },

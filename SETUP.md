@@ -74,7 +74,7 @@ npm run dev
   stockCount: number
   rating: number
   reviews: number
-  isNew: boolean
+  isNewProduct: boolean
   onSale: boolean
   brand: string
   createdAt: Date

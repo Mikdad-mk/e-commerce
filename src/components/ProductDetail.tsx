@@ -18,7 +18,7 @@ interface Product {
   image: string;
   images?: string[];
   colors?: string[];
-  isNew?: boolean;
+  isNewProduct?: boolean;
   onSale?: boolean;
   description: string;
   features?: string[];
@@ -136,7 +136,7 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
           {/* Title and Badges */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              {product.isNew && (
+              {product.isNewProduct && (
                 <Badge variant="secondary" className="bg-badge-new text-primary-foreground">
                   New
                 </Badge>

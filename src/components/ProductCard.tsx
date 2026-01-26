@@ -11,7 +11,7 @@ interface ProductCardProps {
   price: number;
   image: string;
   colors?: string[];
-  isNew?: boolean;
+  isNewProduct?: boolean;
   onSale?: boolean;
   originalPrice?: number;
 }
@@ -22,7 +22,7 @@ export const ProductCard = ({
   price,
   image,
   colors,
-  isNew,
+  isNewProduct,
   onSale,
   originalPrice,
 }: ProductCardProps) => {
@@ -40,7 +40,7 @@ export const ProductCard = ({
           
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
-            {isNew && (
+            {isNewProduct && (
               <span className="rounded bg-badge-new px-2 py-1 text-xs font-medium text-primary-foreground">
                 New
               </span>

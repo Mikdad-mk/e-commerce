@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
       stockCount: productData.stockCount || 10,
       rating: 4.5,
       reviews: 0,
-      isNew: true,
+      isNewProduct: true,
       onSale: !!productData.originalPrice,
       brand: 'Avenzo',
     });
