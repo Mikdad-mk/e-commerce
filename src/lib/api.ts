@@ -432,24 +432,22 @@ function getLocalProducts(params?: {
 }): { products: Product[]; total: number; page: number; totalPages: number } {
   let allProducts: Product[] = [];
   
-  // Add products from localStorage if available (admin-created products)
+  // Only load products from localStorage (admin-created products with Cloudinary images)
   if (typeof window !== 'undefined') {
     try {
       const storedProducts = JSON.parse(localStorage.getItem('avenzo_products') || '[]');
       if (storedProducts && Array.isArray(storedProducts) && storedProducts.length > 0) {
         allProducts = [...storedProducts];
         console.log('Loaded admin products from localStorage:', storedProducts.length);
+      } else {
+        console.log('No admin products found in localStorage');
       }
     } catch (e) {
       console.warn('Failed to load products from localStorage:', e);
     }
   }
   
-  // If no admin products in localStorage, show fallback products for demo
-  if (allProducts.length === 0) {
-    allProducts = [...fallbackProducts];
-    console.log('Using fallback products:', fallbackProducts.length);
-  }
+  // No fallback products - only show admin-created products with Cloudinary images
   
   // Filter products based on params
   let filteredProducts = allProducts;
@@ -482,7 +480,7 @@ function getLocalProducts(params?: {
 }
 
 function getLocalProductById(id: string): Product | null {
-  // Check localStorage first (client-side only)
+  // Only check localStorage for admin-created products (client-side only)
   if (typeof window !== 'undefined') {
     try {
       const storedProducts = JSON.parse(localStorage.getItem('avenzo_products') || '[]');
@@ -496,15 +494,7 @@ function getLocalProductById(id: string): Product | null {
     }
   }
   
-  // Check fallback products only for demo product IDs (1-8) - for direct access
-  if (['1', '2', '3', '4', '5', '6', '7', '8'].includes(id)) {
-    const fallbackProduct = fallbackProducts.find(p => p.id === id);
-    if (fallbackProduct) {
-      console.log('Found fallback product:', fallbackProduct.name);
-      return fallbackProduct;
-    }
-  }
-  
+  // No fallback products - only admin-created products with Cloudinary images
   console.log('Product not found:', id);
   return null;
 }

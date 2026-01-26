@@ -114,15 +114,21 @@ export const ProductGrid = () => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={1.5}
-                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M9 1L5 3l4 2 4-2-4-2z"
+                  d="M12 4v16m8-8H4"
                 />
               </svg>
             </div>
             <div>
               <h3 className="text-xl font-semibold mb-2">No Products Available</h3>
-              <p className="text-muted-foreground">
-                Our product catalog is currently being updated. Please check back soon.
+              <p className="text-muted-foreground mb-4">
+                Products will appear here once they are added through the admin panel.
               </p>
+              <a 
+                href="/admin" 
+                className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+              >
+                Go to Admin Panel
+              </a>
             </div>
           </div>
         </div>

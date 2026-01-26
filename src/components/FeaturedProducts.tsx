@@ -73,7 +73,27 @@ export const FeaturedProducts = () => {
   }
 
   if (error || products.length === 0) {
-    return null; // Don't show the section if there are no products
+    // Don't show the featured products section if there are no admin products
+    return (
+      <section className="py-16 bg-background">
+        <div className="container">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-foreground mb-4">
+              Featured Products
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
+              Products will appear here once they are added through the admin panel
+            </p>
+            <a 
+              href="/admin" 
+              className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+            >
+              Add Products
+            </a>
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (

@@ -100,9 +100,12 @@ export default function TestPage() {
       const products = localStorage.getItem('avenzo_products');
       if (products) {
         const parsed = JSON.parse(products);
-        addResult(`✅ Found ${parsed.length} existing products in localStorage`);
+        addResult(`✅ Found ${parsed.length} admin products in localStorage`);
+        parsed.forEach((product: any, index: number) => {
+          addResult(`  ${index + 1}. ${product.name} (ID: ${product.id})`);
+        });
       } else {
-        addResult("ℹ️ No existing products in localStorage");
+        addResult("ℹ️ No admin products in localStorage");
       }
 
       // Cleanup

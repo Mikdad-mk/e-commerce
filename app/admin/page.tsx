@@ -597,12 +597,13 @@ export default function AdminPage() {
           <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
             <h4 className="font-semibold mb-2 text-green-800">✅ Features:</h4>
             <ul className="list-disc list-inside space-y-1 text-sm text-green-700">
-              <li>Upload multiple images per product</li>
+              <li>Upload multiple Cloudinary images per product</li>
               <li>Real-time upload progress and status</li>
               <li>Image preview before and after upload</li>
               <li>First image automatically becomes main product image</li>
               <li>Products automatically appear on shop and home pages</li>
               <li>Individual image removal capability</li>
+              <li>Only admin-created products with Cloudinary images are displayed</li>
             </ul>
           </div>
 
@@ -613,6 +614,7 @@ export default function AdminPage() {
               <li>Maximum file size: 5MB per image</li>
               <li>Supported formats: JPEG, PNG, WebP, GIF</li>
               <li>Products are stored locally in your browser</li>
+              <li>Only admin-created products are displayed (no dummy products)</li>
               <li>Use the test page (/test) to debug any issues</li>
             </ul>
           </div>

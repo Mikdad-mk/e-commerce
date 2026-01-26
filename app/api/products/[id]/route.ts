@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { fallbackProducts, Product } from '@/lib/api';
+import { Product } from '@/lib/api';
 
 export async function GET(
   request: NextRequest,
@@ -8,16 +8,8 @@ export async function GET(
   try {
     const { id } = await params;
     
-    // Find product in fallback data first
-    const product = fallbackProducts.find(p => p.id === id);
-    
-    if (product) {
-      return NextResponse.json(product);
-    }
-    
-    // If not found in fallback data, it might be a user-created product
-    // These are stored in localStorage on the client side
-    // Admin-created products have timestamp-based IDs or start with 'prod_'
+    // Only handle admin-created products (stored in localStorage)
+    // These have timestamp-based IDs or start with 'prod_'
     // Return a special response indicating client-side lookup is needed
     if (id.startsWith('prod_') || /^\d+$/.test(id)) {
       return NextResponse.json(
@@ -30,6 +22,7 @@ export async function GET(
       );
     }
     
+    // No fallback products - only admin-created products with Cloudinary images
     return NextResponse.json(
       { error: 'Product not found' },
       { status: 404 }
