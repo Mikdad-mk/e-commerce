@@ -4,7 +4,7 @@ import { AboutPage } from "@/components/AboutPage";
 
 export const metadata = {
   title: "About Us | Avenzo",
-  description: "AVENZO LLC provides high-quality household products designed to make everyday life easier. Serving customers across the US and UK with reliable products and dependable service.",
+  description: "AVENZO LLC provides high-quality household products designed to make everyday life easier. Serving customers worldwide with reliable products and dependable service.",
 };
 
 export default function About() {

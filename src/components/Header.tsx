@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, User, Heart, ShoppingBag, Menu } from "lucide-react";
+import { Search, User, ShoppingBag, Menu } from "lucide-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -51,12 +51,6 @@ export const Header = () => {
 
         {/* Icons */}
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="icon" className="relative">
-            <Heart className="h-5 w-5 text-foreground/80" />
-            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground">
-              2
-            </span>
-          </Button>
           <Link href="/cart">
             <Button variant="ghost" size="icon" className="relative">
               <ShoppingBag className="h-5 w-5 text-foreground/80" />

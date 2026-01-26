@@ -5,7 +5,7 @@ export const AboutPage = () => {
       <div className="space-y-6 mb-16">
         <h1 className="text-4xl md:text-5xl font-bold">About Us</h1>
         <p className="text-lg text-muted-foreground leading-relaxed">
-          AVENZO LLC provides high-quality household products designed to make everyday life easier, more organized, and more comfortable. We serve customers across the United States and the United Kingdom with a focus on reliable products and dependable service.
+          AVENZO LLC provides high-quality household products designed to make everyday life easier, more organized, and more comfortable. We serve customers worldwide with a focus on reliable products and dependable service.
         </p>
         <p className="text-lg text-muted-foreground leading-relaxed">
           Each item is carefully selected to meet practical needs while maintaining strong quality standards, usability, and long-term value.
@@ -53,7 +53,7 @@ export const AboutPage = () => {
       <div className="space-y-6">
         <h2 className="text-2xl md:text-3xl font-bold">Our Mission</h2>
         <p className="text-muted-foreground leading-relaxed">
-          Our mission is to simplify everyday living by providing practical household products and a trustworthy shopping experience for customers in the US and UK.
+          Our mission is to simplify everyday living by providing practical household products and a trustworthy shopping experience for customers worldwide.
         </p>
       </div>
     </div>

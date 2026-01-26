@@ -4,6 +4,8 @@ import { Heart } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/hooks/use-cart";
+import { toast } from "sonner";
 
 interface ProductCardProps {
   id: string;
@@ -26,6 +28,24 @@ export const ProductCard = ({
   onSale,
   originalPrice,
 }: ProductCardProps) => {
+  const { addToCart } = useCart();
+
+  const handleQuickAdd = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    addToCart({
+      id,
+      name,
+      price,
+      image,
+      quantity: 1,
+      selectedColor: colors?.[0],
+    });
+    
+    toast.success(`${name} added to cart!`);
+  };
+
   return (
     <article className="product-card group animate-fade-in" style={{ animationDelay: "0.1s" }}>
       <Link href={`/product/${id}`}>
@@ -52,29 +72,11 @@ export const ProductCard = ({
             )}
           </div>
 
-          {/* Wishlist Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute top-3 right-3 h-8 w-8 rounded-full bg-background/80 opacity-0 transition-opacity duration-300 hover:bg-background group-hover:opacity-100"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              // Handle wishlist toggle
-            }}
-          >
-            <Heart className="h-4 w-4" />
-          </Button>
-
           {/* Quick Add */}
           <div className="absolute bottom-0 left-0 right-0 translate-y-full transition-transform duration-300 group-hover:translate-y-0">
             <Button 
               className="w-full rounded-none rounded-b-lg bg-foreground hover:bg-foreground/90 text-background"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                // Handle quick add to cart
-              }}
+              onClick={handleQuickAdd}
             >
               Quick Add
             </Button>
