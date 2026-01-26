@@ -208,16 +208,6 @@ export const ContactPage = () => {
 
           <Card>
             <CardContent className="pt-6 text-center">
-              <Phone className="h-8 w-8 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold mb-2">Phone Support</h3>
-              <p className="text-sm text-muted-foreground">
-                Speak directly with our support team during business hours.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="pt-6 text-center">
               <Clock className="h-8 w-8 text-primary mx-auto mb-3" />
               <h3 className="font-semibold mb-2">Quick Response</h3>
               <p className="text-sm text-muted-foreground">
