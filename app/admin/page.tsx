@@ -487,7 +487,7 @@ export default function AdminPage() {
       </div>
 
       {/* Instructions */}
-      <Card className="mt-8">
+      {/* <Card className="mt-8">
         <CardHeader>
           <CardTitle>Cloudinary Setup Instructions</CardTitle>
         </CardHeader>
@@ -529,7 +529,7 @@ export default function AdminPage() {
             </ul>
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
     </div>
   );
 }
