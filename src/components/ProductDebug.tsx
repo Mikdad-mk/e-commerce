@@ -9,6 +9,12 @@ export const ProductDebug = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [localStorageProducts, setLocalStorageProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Handle client-side hydration
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const loadProducts = async () => {
     setLoading(true);
@@ -16,10 +22,12 @@ export const ProductDebug = () => {
       const response = await getProductsWithFallback({ limit: 20 });
       setProducts(response.products);
       
-      // Also check localStorage directly
-      const stored = localStorage.getItem('avenzo_products');
-      if (stored) {
-        setLocalStorageProducts(JSON.parse(stored));
+      // Also check localStorage directly (client-side only)
+      if (typeof window !== 'undefined') {
+        const stored = localStorage.getItem('avenzo_products');
+        if (stored) {
+          setLocalStorageProducts(JSON.parse(stored));
+        }
       }
     } catch (error) {
       console.error('Error loading products:', error);
@@ -29,13 +37,17 @@ export const ProductDebug = () => {
   };
 
   useEffect(() => {
-    loadProducts();
-  }, []);
+    if (mounted) {
+      loadProducts();
+    }
+  }, [mounted]);
 
   const clearLocalStorage = () => {
-    localStorage.removeItem('avenzo_products');
-    setLocalStorageProducts([]);
-    loadProducts();
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('avenzo_products');
+      setLocalStorageProducts([]);
+      loadProducts();
+    }
   };
 
   return (
@@ -104,7 +116,7 @@ export const ProductDebug = () => {
           <div>
             <h3 className="font-semibold mb-2">Raw LocalStorage Data</h3>
             <pre className="bg-gray-100 p-4 rounded text-xs overflow-auto max-h-40">
-              {localStorage.getItem('avenzo_products') || 'No data'}
+              {!mounted ? 'Loading...' : (typeof window !== 'undefined' ? (localStorage.getItem('avenzo_products') || 'No data') : 'Not available')}
             </pre>
           </div>
         </CardContent>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,12 @@ import { toast } from "sonner";
 export default function TestPage() {
   const [testResults, setTestResults] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Handle client-side hydration
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const addResult = (result: string) => {
     setTestResults(prev => [...prev, `${new Date().toLocaleTimeString()}: ${result}`]);
@@ -68,6 +74,11 @@ export default function TestPage() {
   };
 
   const testLocalStorage = () => {
+    if (!mounted || typeof window === 'undefined') {
+      addResult("❌ localStorage not available (SSR)");
+      return;
+    }
+
     addResult("Testing localStorage...");
     
     try {
@@ -102,6 +113,11 @@ export default function TestPage() {
   };
 
   const addTestProduct = () => {
+    if (!mounted || typeof window === 'undefined') {
+      addResult("❌ localStorage not available (SSR)");
+      return;
+    }
+
     addResult("Adding test product...");
     
     try {
@@ -135,6 +151,11 @@ export default function TestPage() {
   };
 
   const clearProducts = () => {
+    if (!mounted || typeof window === 'undefined') {
+      addResult("❌ localStorage not available (SSR)");
+      return;
+    }
+
     localStorage.removeItem('avenzo_products');
     addResult("✅ All products cleared from localStorage");
     window.dispatchEvent(new CustomEvent('productsUpdated'));
@@ -153,16 +174,16 @@ export default function TestPage() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Button onClick={testCloudinaryUpload} disabled={uploading}>
+            <Button onClick={testCloudinaryUpload} disabled={uploading || !mounted}>
               {uploading ? "Uploading..." : "Test Cloudinary"}
             </Button>
-            <Button onClick={testLocalStorage}>
+            <Button onClick={testLocalStorage} disabled={!mounted}>
               Test LocalStorage
             </Button>
-            <Button onClick={addTestProduct}>
+            <Button onClick={addTestProduct} disabled={!mounted}>
               Add Test Product
             </Button>
-            <Button onClick={clearProducts} variant="destructive">
+            <Button onClick={clearProducts} variant="destructive" disabled={!mounted}>
               Clear Products
             </Button>
           </div>
