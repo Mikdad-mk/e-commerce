@@ -1,7 +1,7 @@
 "use client";
 
 import { Search, User, Heart, ShoppingBag, Menu } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -16,8 +16,15 @@ const navItems = [
 
 export const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
   const { getTotalItems } = useCart();
-  const cartItemCount = getTotalItems();
+  
+  // Only get cart count after hydration to prevent SSR mismatch
+  const cartItemCount = isHydrated ? getTotalItems() : 0;
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
