@@ -38,6 +38,17 @@ Upgraded the e-commerce platform from localStorage to MongoDB database with Clou
   - Added auto-refresh every 30 seconds
   - Updated to handle MongoDB response format
 
+- **src/components/FeaturedProducts.tsx**
+  - Changed from `getProductsWithFallback()` to direct API fetch
+  - Removed localStorage event listeners
+  - Added auto-refresh every 30 seconds
+  - Now fetches from MongoDB API
+
+- **src/components/ProductDebug.tsx**
+  - Updated to fetch from MongoDB API
+  - Shows both MongoDB products and legacy localStorage products
+  - Updated labels to indicate MongoDB as primary source
+
 ## Dependencies Added
 ```json
 {

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ProductCard } from "./ProductCard";
-import { getProductsWithFallback, Product } from "@/lib/api";
+import { Product } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -17,13 +17,15 @@ export const FeaturedProducts = () => {
       setLoading(true);
       setError(null);
 
-      const response = await getProductsWithFallback({
-        page: 1,
-        limit: 4, // Show only 4 featured products
-      });
+      const response = await fetch('/api/products?page=1&limit=4');
+      const data = await response.json();
 
-      setProducts(response.products);
-      console.log('FeaturedProducts loaded products:', response.products.length);
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to fetch products');
+      }
+
+      setProducts(data.products || []);
+      console.log('FeaturedProducts loaded from MongoDB:', data.products?.length || 0);
     } catch (err) {
       setError('Failed to load featured products.');
       console.error('Error fetching featured products:', err);
@@ -35,25 +37,13 @@ export const FeaturedProducts = () => {
   useEffect(() => {
     fetchFeaturedProducts();
     
-    // Listen for localStorage changes to refresh products when admin adds new ones
-    const handleStorageChange = () => {
-      console.log('localStorage changed, refreshing featured products...');
+    // Refresh products every 30 seconds to catch new additions
+    const interval = setInterval(() => {
       fetchFeaturedProducts();
-    };
-    
-    window.addEventListener('storage', handleStorageChange);
-    
-    // Also listen for custom events from admin panel
-    const handleProductsUpdated = () => {
-      console.log('Products updated event received, refreshing featured products...');
-      fetchFeaturedProducts();
-    };
-    
-    window.addEventListener('productsUpdated', handleProductsUpdated);
+    }, 30000);
     
     return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('productsUpdated', handleProductsUpdated);
+      clearInterval(interval);
     };
   }, []);
 

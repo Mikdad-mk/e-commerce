@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getProductsWithFallback, Product } from "@/lib/api";
+import { Product } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -19,8 +19,12 @@ export const ProductDebug = () => {
   const loadProducts = async () => {
     setLoading(true);
     try {
-      const response = await getProductsWithFallback({ limit: 20 });
-      setProducts(response.products);
+      const response = await fetch('/api/products?limit=20');
+      const data = await response.json();
+      
+      if (response.ok) {
+        setProducts(data.products || []);
+      }
       
       // Also check localStorage directly (client-side only)
       if (typeof window !== 'undefined') {
@@ -66,7 +70,7 @@ export const ProductDebug = () => {
         </CardHeader>
         <CardContent className="space-y-6">
           <div>
-            <h3 className="font-semibold mb-2">Products from API ({products.length})</h3>
+            <h3 className="font-semibold mb-2">Products from MongoDB API ({products.length})</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {products.map((product) => (
                 <div key={product.id} className="border p-3 rounded">
@@ -90,10 +94,13 @@ export const ProductDebug = () => {
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">LocalStorage Products ({localStorageProducts.length})</h3>
+            <h3 className="font-semibold mb-2">LocalStorage Products (Legacy - {localStorageProducts.length})</h3>
+            <p className="text-sm text-muted-foreground mb-2">
+              Note: Products are now stored in MongoDB. LocalStorage is no longer used.
+            </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {localStorageProducts.map((product) => (
-                <div key={product.id} className="border p-3 rounded bg-green-50">
+                <div key={product.id} className="border p-3 rounded bg-yellow-50">
                   <img 
                     src={product.image} 
                     alt={product.name}
