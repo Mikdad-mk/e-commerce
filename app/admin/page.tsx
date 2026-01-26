@@ -219,7 +219,13 @@ export default function AdminPage() {
         category: formData.category || 'Home Essentials',
         image: formData.images[0], // First image as main image
         images: formData.images, // All images
+        colors: ['#000000'], // Default color
+        features: [], // Empty features array
+        dimensions: 'Standard size',
+        material: 'High quality materials',
+        care: 'Follow standard care instructions',
         inStock: true,
+        stockCount: 10, // Default stock count
         rating: 4.5,
         reviews: Math.floor(Math.random() * 100) + 10,
       };

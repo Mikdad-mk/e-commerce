@@ -16,17 +16,17 @@ interface Product {
   price: number;
   originalPrice?: number;
   image: string;
-  images: string[];
-  colors: string[];
+  images?: string[];
+  colors?: string[];
   isNew?: boolean;
   onSale?: boolean;
   description: string;
-  features: string[];
-  dimensions: string;
-  material: string;
-  care: string;
+  features?: string[];
+  dimensions?: string;
+  material?: string;
+  care?: string;
   inStock: boolean;
-  stockCount: number;
+  stockCount?: number;
 }
 
 interface ProductDetailProps {
@@ -49,7 +49,7 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
       price: product.price,
       image: product.image,
       quantity: quantity,
-      selectedColor: product.colors[selectedColor]
+      selectedColor: product.colors && product.colors.length > 0 ? product.colors[selectedColor] : undefined
     });
     toast.success(`${product.name} added to cart!`);
   };
@@ -72,7 +72,8 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
   };
 
   const incrementQuantity = () => {
-    if (quantity < product.stockCount) {
+    const maxStock = product.stockCount || 99; // Default to 99 if stockCount is undefined
+    if (quantity < maxStock) {
       setQuantity(quantity + 1);
     }
   };
@@ -99,7 +100,7 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
         <div className="space-y-4">
           <div className="aspect-square overflow-hidden rounded-lg bg-secondary/50">
             <img
-              src={product.images[selectedImage]}
+              src={(product.images && product.images[selectedImage]) || product.image}
               alt={product.name}
               className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
               loading="lazy"
@@ -107,25 +108,27 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
           </div>
           
           {/* Image Thumbnails */}
-          <div className="flex space-x-2 overflow-x-auto pb-2">
-            {product.images.map((image, index) => (
-              <button
-                key={index}
-                onClick={() => setSelectedImage(index)}
-                className={cn(
-                  "aspect-square w-16 sm:w-20 flex-shrink-0 overflow-hidden rounded-md border-2 transition-colors",
-                  selectedImage === index ? "border-primary" : "border-transparent"
-                )}
-              >
-                <img
-                  src={image}
-                  alt={`${product.name} ${index + 1}`}
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                />
-              </button>
-            ))}
-          </div>
+          {product.images && product.images.length > 1 && (
+            <div className="flex space-x-2 overflow-x-auto pb-2">
+              {product.images.map((image, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedImage(index)}
+                  className={cn(
+                    "aspect-square w-16 sm:w-20 flex-shrink-0 overflow-hidden rounded-md border-2 transition-colors",
+                    selectedImage === index ? "border-primary" : "border-transparent"
+                  )}
+                >
+                  <img
+                    src={image}
+                    alt={`${product.name} ${index + 1}`}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Product Info */}
@@ -184,25 +187,27 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
           </p>
 
           {/* Color Selection */}
-          <div className="space-y-3">
-            <h3 className="text-sm font-medium">Color</h3>
-            <div className="flex items-center space-x-2">
-              {product.colors.map((color, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedColor(index)}
-                  className={cn(
-                    "h-8 w-8 rounded-full border-2 transition-all",
-                    selectedColor === index 
-                      ? "border-foreground scale-110" 
-                      : "border-border hover:scale-105"
-                  )}
-                  style={{ backgroundColor: color }}
-                  aria-label={`Color option ${index + 1}`}
-                />
-              ))}
+          {product.colors && product.colors.length > 0 && (
+            <div className="space-y-3">
+              <h3 className="text-sm font-medium">Color</h3>
+              <div className="flex items-center space-x-2">
+                {product.colors.map((color, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedColor(index)}
+                    className={cn(
+                      "h-8 w-8 rounded-full border-2 transition-all",
+                      selectedColor === index 
+                        ? "border-foreground scale-110" 
+                        : "border-border hover:scale-105"
+                    )}
+                    style={{ backgroundColor: color }}
+                    aria-label={`Color option ${index + 1}`}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Quantity and Add to Cart */}
           <div className="space-y-4">
@@ -222,7 +227,7 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
                   variant="ghost"
                   size="icon"
                   onClick={incrementQuantity}
-                  disabled={quantity >= product.stockCount}
+                  disabled={quantity >= (product.stockCount || 99)}
                   className="h-10 w-10"
                 >
                   <Plus className="h-4 w-4" />
@@ -230,7 +235,7 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
               </div>
               
               <div className="text-sm text-muted-foreground">
-                {product.stockCount} in stock
+                {product.stockCount || 'In stock'}
               </div>
             </div>
 
@@ -293,11 +298,11 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <h4 className="font-medium mb-2">Dimensions</h4>
-                  <p className="text-muted-foreground">{product.dimensions}</p>
+                  <p className="text-muted-foreground">{product.dimensions || 'Standard size'}</p>
                 </div>
                 <div>
                   <h4 className="font-medium mb-2">Material</h4>
-                  <p className="text-muted-foreground">{product.material}</p>
+                  <p className="text-muted-foreground">{product.material || 'High quality materials'}</p>
                 </div>
               </div>
             </div>
@@ -305,19 +310,23 @@ export const ProductDetail = ({ product }: ProductDetailProps) => {
           
           <TabsContent value="features" className="mt-6">
             <h3 className="text-lg font-semibold mb-4">Key Features</h3>
-            <ul className="space-y-2">
-              {product.features.map((feature, index) => (
-                <li key={index} className="flex items-start space-x-2">
-                  <span className="text-primary mt-1">•</span>
-                  <span className="text-muted-foreground">{feature}</span>
-                </li>
-              ))}
-            </ul>
+            {product.features && product.features.length > 0 ? (
+              <ul className="space-y-2">
+                {product.features.map((feature, index) => (
+                  <li key={index} className="flex items-start space-x-2">
+                    <span className="text-primary mt-1">•</span>
+                    <span className="text-muted-foreground">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-muted-foreground">No specific features listed for this product.</p>
+            )}
           </TabsContent>
           
           <TabsContent value="care" className="mt-6">
             <h3 className="text-lg font-semibold mb-4">Care Instructions</h3>
-            <p className="text-muted-foreground leading-relaxed">{product.care}</p>
+            <p className="text-muted-foreground leading-relaxed">{product.care || 'Follow standard care instructions for this type of product.'}</p>
           </TabsContent>
         </Tabs>
       </div>
