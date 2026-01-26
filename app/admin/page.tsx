@@ -60,11 +60,13 @@ export default function AdminPage() {
     }
   }, [authenticated]);
 
-  const loadStoredProducts = () => {
+  const loadStoredProducts = async () => {
     try {
-      const stored = localStorage.getItem('avenzo_products');
-      if (stored) {
-        setStoredProducts(JSON.parse(stored));
+      const response = await fetch('/api/products');
+      const data = await response.json();
+      
+      if (data.products) {
+        setStoredProducts(data.products);
       }
     } catch (error) {
       console.error('Error loading products:', error);
@@ -221,38 +223,32 @@ export default function AdminPage() {
     setLoading(true);
 
     try {
-      const newProduct: Product = {
-        id: Date.now().toString(),
+      const productData = {
         name: formData.name,
         price: parseFloat(formData.price),
         originalPrice: formData.originalPrice ? parseFloat(formData.originalPrice) : undefined,
         description: formData.description,
         category: formData.category || 'Home Essentials',
-        image: formData.images[0], // First image as main image
-        images: formData.images, // All images
-        colors: ['#000000'], // Default color
-        features: [], // Empty features array
-        dimensions: 'Standard size',
-        material: 'High quality materials',
-        care: 'Follow standard care instructions',
-        inStock: true,
-        stockCount: 10, // Default stock count
-        rating: 4.5,
-        reviews: Math.floor(Math.random() * 100) + 10,
+        images: formData.images,
       };
 
-      console.log('Creating new product:', newProduct);
+      console.log('Sending product to API:', productData);
 
-      // Save to localStorage
-      const existingProducts = JSON.parse(localStorage.getItem('avenzo_products') || '[]');
-      const updatedProducts = [...existingProducts, newProduct];
-      localStorage.setItem('avenzo_products', JSON.stringify(updatedProducts));
+      const response = await fetch('/api/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(productData),
+      });
 
-      console.log('Product saved to localStorage. Total products:', updatedProducts.length);
+      const result = await response.json();
 
-      // Dispatch custom event to notify other components
-      window.dispatchEvent(new CustomEvent('productsUpdated'));
-      console.log('Products updated event dispatched');
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to create product');
+      }
+
+      console.log('Product created successfully:', result);
 
       // Reset form
       setFormData({
@@ -265,30 +261,33 @@ export default function AdminPage() {
       });
       setUploadedImages([]);
 
-      loadStoredProducts();
-      toast.success('Product added successfully!');
+      await loadStoredProducts();
+      toast.success('Product added successfully to MongoDB!');
     } catch (error) {
       console.error('Error adding product:', error);
-      toast.error('Failed to add product');
+      toast.error(error instanceof Error ? error.message : 'Failed to add product');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDeleteProduct = (productId: string) => {
+  const handleDeleteProduct = async (productId: string) => {
     try {
-      const existingProducts = JSON.parse(localStorage.getItem('avenzo_products') || '[]');
-      const updatedProducts = existingProducts.filter((p: Product) => p.id !== productId);
-      localStorage.setItem('avenzo_products', JSON.stringify(updatedProducts));
-      
-      // Dispatch custom event to notify other components
-      window.dispatchEvent(new CustomEvent('productsUpdated'));
-      
-      loadStoredProducts();
-      toast.success('Product deleted successfully!');
+      const response = await fetch(`/api/products?id=${productId}`, {
+        method: 'DELETE',
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to delete product');
+      }
+
+      await loadStoredProducts();
+      toast.success('Product deleted successfully from MongoDB!');
     } catch (error) {
       console.error('Error deleting product:', error);
-      toast.error('Failed to delete product');
+      toast.error(error instanceof Error ? error.message : 'Failed to delete product');
     }
   };
 
@@ -643,7 +642,7 @@ export default function AdminPage() {
               <li><strong>Choose Image Method:</strong> Select "Upload New Images" or "Browse Cloudinary Images"</li>
               <li><strong>Upload Method:</strong> Select files → Upload to Cloudinary → Submit product</li>
               <li><strong>Browse Method:</strong> Browse existing Cloudinary images → Select images → Submit product</li>
-              <li><strong>Submit Product:</strong> Click "Add Product" button to save</li>
+              <li><strong>Submit Product:</strong> Click "Add Product" button to save to MongoDB</li>
               <li><strong>Verify:</strong> Check that the product appears in the "Stored Products" section</li>
             </ol>
           </div>
@@ -657,9 +656,9 @@ export default function AdminPage() {
               <li>Real-time upload progress and status</li>
               <li>Image preview before and after selection</li>
               <li>First image automatically becomes main product image</li>
+              <li>Products stored in MongoDB database</li>
               <li>Products automatically appear on shop and home pages</li>
               <li>Individual image removal capability</li>
-              <li>Only admin-created products with Cloudinary images are displayed</li>
             </ul>
           </div>
 
@@ -669,8 +668,8 @@ export default function AdminPage() {
               <li>You must upload images to Cloudinary BEFORE submitting the product</li>
               <li>Maximum file size: 5MB per image</li>
               <li>Supported formats: JPEG, PNG, WebP, GIF</li>
-              <li>Products are stored locally in your browser</li>
-              <li>Only admin-created products are displayed (no dummy products)</li>
+              <li>Products are stored in MongoDB database</li>
+              <li>Images are stored in Cloudinary CDN</li>
               <li>Use the test page (/test) to debug any issues</li>
             </ul>
           </div>

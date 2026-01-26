@@ -1,20 +1,55 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getProductsWithFallback, Product } from '@/lib/api';
+import connectDB from '@/lib/mongodb';
+import Product from '@/models/Product';
 
 export async function GET(request: NextRequest) {
   try {
+    await connectDB();
+    
     const { searchParams } = new URL(request.url);
-    
-    const params = {
-      page: searchParams.get('page') ? parseInt(searchParams.get('page')!) : undefined,
-      limit: searchParams.get('limit') ? parseInt(searchParams.get('limit')!) : undefined,
-      category: searchParams.get('category') || undefined,
-      search: searchParams.get('search') || undefined,
-    };
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '12');
+    const category = searchParams.get('category');
+    const search = searchParams.get('search');
 
-    const result = await getProductsWithFallback(params);
-    
-    return NextResponse.json(result);
+    // Build query
+    const query: any = {};
+    if (category && category !== 'all') {
+      query.category = category;
+    }
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } },
+      ];
+    }
+
+    // Get total count
+    const total = await Product.countDocuments(query);
+
+    // Get products with pagination
+    const products = await Product.find(query)
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .lean();
+
+    // Transform MongoDB _id to id
+    const transformedProducts = products.map((product: any) => ({
+      ...product,
+      id: product._id.toString(),
+      _id: undefined,
+    }));
+
+    return NextResponse.json({
+      products: transformedProducts,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error) {
     console.error('API Error:', error);
     return NextResponse.json(
@@ -26,65 +61,93 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    await connectDB();
+    
     const productData = await request.json();
     
     // Validate required fields
-    if (!productData.name || !productData.price || !productData.description) {
+    if (!productData.name || !productData.price || !productData.description || !productData.images || productData.images.length === 0) {
       return NextResponse.json(
-        { error: 'Missing required fields: name, price, description' },
+        { error: 'Missing required fields: name, price, description, images' },
         { status: 400 }
       );
     }
 
-    // Generate unique ID for the product
-    const productId = `prod_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
-    // Create complete product object
-    const newProduct: Product = {
-      id: productId,
+    // Create new product
+    const newProduct = new Product({
       name: productData.name,
       price: parseFloat(productData.price),
       originalPrice: productData.originalPrice ? parseFloat(productData.originalPrice) : undefined,
-      image: productData.image || productData.images?.[0] || '/placeholder.svg',
-      images: productData.images || [productData.image || '/placeholder.svg'],
-      colors: productData.colors || ['#000000'],
-      isNew: productData.isNew || true,
-      onSale: productData.onSale || false,
       description: productData.description,
+      category: productData.category || 'Home Essentials',
+      image: productData.images[0],
+      images: productData.images,
+      colors: productData.colors || ['#000000'],
       features: productData.features || [],
       dimensions: productData.dimensions || 'Standard size',
       material: productData.material || 'High quality materials',
-      care: productData.care || 'Follow care instructions',
+      care: productData.care || 'Follow standard care instructions',
       inStock: productData.inStock !== false,
       stockCount: productData.stockCount || 10,
-      category: productData.category || 'General',
-      brand: 'Avenzo',
       rating: 4.5,
       reviews: 0,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
+      isNew: true,
+      onSale: !!productData.originalPrice,
+      brand: 'Avenzo',
+    });
 
-    // In a real application, you would save this to a database
-    // For now, we'll store it in localStorage on the client side
-    // or you could implement a simple file-based storage system
-    
-    // Store in browser localStorage (this is a demo implementation)
-    // In production, you'd save to a database
-    console.log('New product created:', newProduct);
-    
-    // For demo purposes, we'll just return success
-    // The product will be stored client-side via localStorage
+    await newProduct.save();
+
     return NextResponse.json({
       success: true,
-      product: newProduct,
-      message: 'Product created successfully'
+      product: {
+        ...newProduct.toObject(),
+        id: newProduct._id.toString(),
+      },
+      message: 'Product created successfully',
     }, { status: 201 });
     
   } catch (error) {
     console.error('Product creation error:', error);
     return NextResponse.json(
       { error: 'Failed to create product' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    await connectDB();
+    
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Product ID is required' },
+        { status: 400 }
+      );
+    }
+
+    const deletedProduct = await Product.findByIdAndDelete(id);
+
+    if (!deletedProduct) {
+      return NextResponse.json(
+        { error: 'Product not found' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: 'Product deleted successfully',
+    });
+    
+  } catch (error) {
+    console.error('Product deletion error:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete product' },
       { status: 500 }
     );
   }

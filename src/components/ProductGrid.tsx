@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ProductCard } from "./ProductCard";
-import { getProductsWithFallback, Product } from "@/lib/api";
+import { Product } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
@@ -18,16 +18,18 @@ export const ProductGrid = () => {
       setLoading(true);
       setError(null);
 
-      const response = await getProductsWithFallback({
-        page,
-        limit: 8, // Show 8 products per page
-      });
+      const response = await fetch(`/api/products?page=${page}&limit=8`);
+      const data = await response.json();
 
-      setProducts(response.products);
-      setCurrentPage(response.page);
-      setTotalPages(response.totalPages);
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to fetch products');
+      }
+
+      setProducts(data.products || []);
+      setCurrentPage(data.pagination?.page || 1);
+      setTotalPages(data.pagination?.totalPages || 1);
       
-      console.log('ProductGrid loaded products:', response.products.length);
+      console.log('ProductGrid loaded products from MongoDB:', data.products?.length || 0);
     } catch (err) {
       setError('Failed to load products. Please try again.');
       console.error('Error fetching products:', err);
@@ -39,25 +41,13 @@ export const ProductGrid = () => {
   useEffect(() => {
     fetchProducts(1);
     
-    // Listen for localStorage changes to refresh products when admin adds new ones
-    const handleStorageChange = () => {
-      console.log('localStorage changed, refreshing products...');
+    // Refresh products every 30 seconds to catch new additions
+    const interval = setInterval(() => {
       fetchProducts(currentPage);
-    };
-    
-    window.addEventListener('storage', handleStorageChange);
-    
-    // Also listen for custom events from admin panel
-    const handleProductsUpdated = () => {
-      console.log('Products updated event received, refreshing...');
-      fetchProducts(currentPage);
-    };
-    
-    window.addEventListener('productsUpdated', handleProductsUpdated);
+    }, 30000);
     
     return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('productsUpdated', handleProductsUpdated);
+      clearInterval(interval);
     };
   }, []);
 
