@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Mail, Phone, MapPin, Clock, Send } from "lucide-react";
+import { Mail, MapPin, Clock, Send } from "lucide-react";
 
 export const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -70,15 +70,6 @@ export const ContactPage = () => {
                     <div>
                       <p className="font-medium">Email</p>
                       <p className="text-sm text-muted-foreground">avanzoaofficial@gmail.com</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <Phone className="h-5 w-5 text-primary mt-1" />
-                    <div>
-                      <p className="font-medium">Phone</p>
-                      <p className="text-sm text-muted-foreground">+1 (555) 123-4567</p>
-                      <p className="text-sm text-muted-foreground">Toll-free: +1 (800) 123-4567</p>
                     </div>
                   </div>
 

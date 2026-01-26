@@ -206,8 +206,7 @@ export const ShippingPage = () => {
               <div className="border-t pt-4">
                 <h3 className="font-semibold mb-2">Need Tracking Help?</h3>
                 <p className="text-sm text-muted-foreground">
-                  Contact us at <span className="font-medium">avanzoaofficial@gmail.com</span> or 
-                  <span className="font-medium"> +1 (555) 123-4567</span> with your order number.
+                  Contact us at <span className="font-medium">avanzoaofficial@gmail.com</span> with your order number.
                 </p>
               </div>
             </CardContent>
@@ -226,8 +225,7 @@ export const ShippingPage = () => {
                 <h3 className="font-semibold mb-2">Contact Our Support Team</h3>
                 <p className="text-sm text-muted-foreground">
                   Have questions about shipping? Contact our customer service team at 
-                  <span className="font-medium"> avanzoaofficial@gmail.com</span> or 
-                  <span className="font-medium"> +1 (555) 123-4567</span>.
+                  <span className="font-medium"> avanzoaofficial@gmail.com</span>.
                 </p>
               </div>
             </CardContent>
