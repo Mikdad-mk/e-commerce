@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Upload, RefreshCw, X, Trash2, Eye, LogOut, Clock, Plus } from "lucide-react";
+import { Upload, RefreshCw, X, Trash2, Eye, LogOut, Clock, Plus, Database } from "lucide-react";
 import { Product } from "@/lib/api";
 import { isAuthenticated, logout, getSessionTimeRemaining, extendSession } from "@/lib/auth";
 import { AdminLogin } from "@/components/AdminLogin";
@@ -18,6 +18,8 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [storedProducts, setStoredProducts] = useState<Product[]>([]);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [totalImages, setTotalImages] = useState(0);
   const [sessionTimeLeft, setSessionTimeLeft] = useState<number>(0);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
@@ -62,11 +64,18 @@ export default function AdminPage() {
 
   const loadStoredProducts = async () => {
     try {
-      const response = await fetch('/api/products');
+      const response = await fetch('/api/products?limit=100');
       const data = await response.json();
       
       if (data.products) {
         setStoredProducts(data.products);
+        setTotalProducts(data.pagination?.total || data.products.length);
+        
+        // Calculate total images
+        const imageCount = data.products.reduce((sum: number, product: Product) => {
+          return sum + (product.images?.length || 1);
+        }, 0);
+        setTotalImages(imageCount);
       }
     } catch (error) {
       console.error('Error loading products:', error);
@@ -339,6 +348,70 @@ export default function AdminPage() {
         </div>
       </div>
 
+      {/* Statistics Cards */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold flex items-center gap-2">
+            <Database className="h-5 w-5" />
+            MongoDB Statistics
+          </h2>
+          <Button
+            onClick={loadStoredProducts}
+            variant="outline"
+            size="sm"
+          >
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Refresh
+          </Button>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Total Products in MongoDB
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-primary">{totalProducts}</div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Stored in database
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Total Images in Cloudinary
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-primary">{totalImages}</div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Across all products
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Average Images per Product
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-primary">
+                {totalProducts > 0 ? (totalImages / totalProducts).toFixed(1) : '0'}
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Images per product
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Add Product Form */}
         <Card>
@@ -570,7 +643,7 @@ export default function AdminPage() {
         {/* Products List */}
         <Card>
           <CardHeader>
-            <CardTitle>Stored Products ({storedProducts.length})</CardTitle>
+            <CardTitle>Products in MongoDB ({storedProducts.length})</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4 max-h-96 overflow-y-auto">
