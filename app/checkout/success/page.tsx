@@ -11,13 +11,13 @@ import { useCart } from "@/hooks/use-cart";
 
 function SuccessContent() {
   const searchParams = useSearchParams();
-  const sessionId = searchParams.get('session_id');
+  const orderId = searchParams.get('order_id');
   const { clearCart } = useCart();
   const [cleared, setCleared] = useState(false);
   const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
-    if (sessionId && !cleared) {
+    if (orderId && !cleared) {
       // Clear cart after successful payment
       clearCart();
       setCleared(true);
@@ -25,7 +25,7 @@ function SuccessContent() {
     
     // Trigger animations
     setTimeout(() => setShowContent(true), 100);
-  }, [sessionId, cleared, clearCart]);
+  }, [orderId, cleared, clearCart]);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -57,12 +57,12 @@ function SuccessContent() {
                   </div>
 
                   {/* Order ID */}
-                  {sessionId && (
+                  {orderId && (
                     <div className="bg-secondary/50 rounded-lg p-4 mb-8">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm text-muted-foreground mb-1">Order ID</p>
-                          <p className="font-mono font-semibold text-base">{sessionId.slice(-12).toUpperCase()}</p>
+                          <p className="font-mono font-semibold text-base">{orderId.slice(-12).toUpperCase()}</p>
                         </div>
                         <Package className="h-5 w-5 text-primary" />
                       </div>
